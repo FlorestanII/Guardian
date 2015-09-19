@@ -1,11 +1,13 @@
 package me.florestanii.guardian.arena;
 
 import me.florestanii.guardian.Guardian;
-import me.florestanii.guardian.util.Util;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
 import me.florestanii.guardian.arena.team.GuardianTeam;
+import me.florestanii.guardian.util.Util;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -121,9 +123,9 @@ public class GuardianArena {
                     }
                 }, 25);
                 if (red.isPlayerInTeam(p)) {
-                    red.leftPlayer(p.getUniqueId());
+                    red.removePlayer(p.getUniqueId());
                 } else if (blue.isPlayerInTeam(p)) {
-                    blue.leftPlayer(p.getUniqueId());
+                    blue.removePlayer(p.getUniqueId());
                 }
             }
 
@@ -200,7 +202,6 @@ public class GuardianArena {
     }
 
     public void resetArena() {
-
         lobby.kickAllPlayers();
         red.kickAllPlayers();
         blue.kickAllPlayers();
@@ -213,10 +214,12 @@ public class GuardianArena {
 
         guardianSpawner.stopSpawner();
 
-        world.getBlockAt(red.getRespawnblock1()).setType(Material.DIAMOND_BLOCK);
-        world.getBlockAt(red.getRespawnblock2()).setType(Material.DIAMOND_BLOCK);
-        world.getBlockAt(blue.getRespawnblock1()).setType(Material.DIAMOND_BLOCK);
-        world.getBlockAt(blue.getRespawnblock2()).setType(Material.DIAMOND_BLOCK);
+        for (Location location : red.getRespawnBlocks()) {
+            location.getBlock().setType(Material.DIAMOND);
+        }
+        for (Location location : blue.getRespawnBlocks()) {
+            location.getBlock().setType(Material.DIAMOND);
+        }
 
         for (Entity e : world.getEntities()) {
             if (!(e instanceof Villager) && !(e instanceof Player)) {
@@ -231,17 +234,7 @@ public class GuardianArena {
     public void startArena(ArrayList<GuardianPlayer> players) {
         state = GuardianArenaState.INGAME;
         Random r = new Random();
-
-        for (Entity e : world.getEntities()) {
-            if (e instanceof Item || e instanceof IronGolem) {
-                e.remove();
-            }
-        }
-
-        world.getBlockAt(red.getRespawnblock1()).setType(Material.DIAMOND_BLOCK);
-        world.getBlockAt(red.getRespawnblock2()).setType(Material.DIAMOND_BLOCK);
-        world.getBlockAt(blue.getRespawnblock1()).setType(Material.DIAMOND_BLOCK);
-        world.getBlockAt(blue.getRespawnblock2()).setType(Material.DIAMOND_BLOCK);
+        resetArena();
 
         for (GuardianPlayer player : players) {
             plugin.getServer().getPlayer(player.getUniqueId()).getInventory().clear();
@@ -266,9 +259,7 @@ public class GuardianArena {
 
         emeraldSpawner.startSpawner();
         diamondSpawner.startSpawner();
-
         guardianSpawner.startSpawner();
-
     }
 
     public void setLeavePos(Location leavePos) {
