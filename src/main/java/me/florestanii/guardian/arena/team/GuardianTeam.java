@@ -8,7 +8,10 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class GuardianTeam {
     private GuardianArena arena;
@@ -150,7 +153,7 @@ public class GuardianTeam {
         return false;
     }
 
-    public Collection<Location> getRespawnBlocks() {
+    public List<Location> getRespawnBlocks() {
         return respawnBlocks;
     }
 }
