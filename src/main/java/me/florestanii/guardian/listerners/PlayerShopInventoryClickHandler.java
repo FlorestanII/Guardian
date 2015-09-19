@@ -1,9 +1,9 @@
 package me.florestanii.guardian.listerners;
 
 import me.florestanii.guardian.Guardian;
-import me.florestanii.guardian.Util;
-import me.florestanii.guardian.arena.merchant.Merchant;
-import me.florestanii.guardian.arena.merchant.MerchantOffer;
+import me.florestanii.guardian.util.Util;
+import me.florestanii.guardian.util.merchant.Merchant;
+import me.florestanii.guardian.util.merchant.MerchantOffer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

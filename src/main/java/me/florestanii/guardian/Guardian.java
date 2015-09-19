@@ -2,7 +2,7 @@ package me.florestanii.guardian;
 
 import me.florestanii.guardian.arena.GuardianArena;
 import me.florestanii.guardian.arena.GuardianArenaState;
-import me.florestanii.guardian.arena.shopspecialitems.TeleportPowderHandler;
+import me.florestanii.guardian.arena.specialitems.teleportpowder.TeleportPowderHandler;
 import me.florestanii.guardian.listerners.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

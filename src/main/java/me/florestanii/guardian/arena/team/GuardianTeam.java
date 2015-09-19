@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import me.florestanii.guardian.Util;
+import me.florestanii.guardian.util.Util;
 import me.florestanii.guardian.arena.GuardianArena;
 
 import org.bukkit.ChatColor;

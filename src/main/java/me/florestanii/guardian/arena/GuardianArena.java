@@ -1,7 +1,7 @@
 package me.florestanii.guardian.arena;
 
 import me.florestanii.guardian.Guardian;
-import me.florestanii.guardian.Util;
+import me.florestanii.guardian.util.Util;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
 import me.florestanii.guardian.arena.team.GuardianTeam;
 import org.bukkit.*;

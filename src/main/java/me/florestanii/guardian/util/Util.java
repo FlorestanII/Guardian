@@ -1,8 +1,9 @@
-package me.florestanii.guardian;
+package me.florestanii.guardian.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import me.florestanii.guardian.Guardian;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -17,8 +18,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public class Util {
-
-	@SuppressWarnings("deprecation")
 	public static void setTagColor(Guardian plugin, Player p, ChatColor color){
 		Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
 		Team team = board.getTeam(p.getName());

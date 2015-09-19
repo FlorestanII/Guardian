@@ -1,7 +1,7 @@
 package me.florestanii.guardian.listerners;
 
 import me.florestanii.guardian.Guardian;
-import me.florestanii.guardian.Util;
+import me.florestanii.guardian.util.Util;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
