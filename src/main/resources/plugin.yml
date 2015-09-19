@@ -1,0 +1,10 @@
+name: Guardian
+author: FlorestanII
+version: VERSION
+main: me.florestanii.guardian.Guardian
+commands:
+  guardian:
+    usage: /<command> <args>
+  start:
+    usage: /<command>
+    
