@@ -3,6 +3,7 @@ package me.florestanii.guardian.listerners;
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.GuardianArena;
 import me.florestanii.guardian.util.Util;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -74,13 +75,13 @@ public class PlayerInteractHandler implements Listener {
                             shopInv.setItem(i, Util.renameItemStack(new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData()), " "));
                         }
 
-                        shopInv.setItem(10, Util.renameItemStack(new ItemStack(Material.IRON_SWORD), "�rWeapons"));
-                        shopInv.setItem(11, Util.renameItemStack(new ItemStack(Material.CHAINMAIL_CHESTPLATE), "�rArmor"));
-                        shopInv.setItem(12, Util.renameItemStack(new ItemStack(Material.IRON_PICKAXE), "�rPickaxes"));
-                        shopInv.setItem(13, Util.renameItemStack(new ItemStack(Material.BOW), "�rBows"));
-                        shopInv.setItem(14, Util.renameItemStack(new ItemStack(Material.POTION), "�rPotions"));
-                        shopInv.setItem(15, Util.renameItemStack(new ItemStack(Material.APPLE), "�rFood"));
-                        shopInv.setItem(16, Util.renameItemStack(new ItemStack(Material.ENDER_PEARL), "�rSpecial"));
+                        shopInv.setItem(10, Util.renameItemStack(new ItemStack(Material.IRON_SWORD), ChatColor.RESET + "Weapons"));
+                        shopInv.setItem(11, Util.renameItemStack(new ItemStack(Material.CHAINMAIL_CHESTPLATE), ChatColor.RESET + "Armor"));
+                        shopInv.setItem(12, Util.renameItemStack(new ItemStack(Material.IRON_PICKAXE), ChatColor.RESET + "Pickaxes"));
+                        shopInv.setItem(13, Util.renameItemStack(new ItemStack(Material.BOW), ChatColor.RESET + "Bows"));
+                        shopInv.setItem(14, Util.renameItemStack(new ItemStack(Material.POTION), ChatColor.RESET + "Potions"));
+                        shopInv.setItem(15, Util.renameItemStack(new ItemStack(Material.APPLE), ChatColor.RESET + "Food"));
+                        shopInv.setItem(16, Util.renameItemStack(new ItemStack(Material.ENDER_PEARL), ChatColor.RESET + "Special"));
 
                         for (int i = 17; i < 27; i++) {
                             shopInv.setItem(i, Util.renameItemStack(new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData()), " "));

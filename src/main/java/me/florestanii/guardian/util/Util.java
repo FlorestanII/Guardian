@@ -9,7 +9,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -44,38 +43,13 @@ public class Util {
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
         meta.setColor(color);
         item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public static ItemStack getPotion(PotionEffect effect, int metadata) {
-        ItemStack item = new ItemStack(Material.POTION, 1, (short) metadata);
-
-        PotionMeta meta = (PotionMeta) item.getItemMeta();
-        meta.addCustomEffect(effect, false);
-        item.setItemMeta(meta);
-
         return item;
     }
 
     public static ItemStack renameItemStack(ItemStack item, String name) {
-
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public static ItemStack addLoreLineToItemStack(ItemStack item, String loreLine) {
-        ItemMeta meta = item.getItemMeta();
-        List<String> lore = meta.getLore();
-        if (lore == null) lore = new ArrayList<String>();
-        lore.add(loreLine);
-        meta.setLore(lore);
-
-        item.setItemMeta(meta);
-
         return item;
     }
 

@@ -39,7 +39,7 @@ public class Merchant {
         return this;
     }
 
-    public Merchant addOffers(MerchantOffer[] offers) {
+    public Merchant addOffers(MerchantOffer... offers) {
         for (MerchantOffer o : offers) {
             addOffer(o);
         }

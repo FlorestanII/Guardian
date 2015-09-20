@@ -42,7 +42,7 @@ public class Guardian extends JavaPlugin implements CommandHandler {
         new PlayerAttackHandler(this);
         new PlayerMoveHandler(this);
         new EntityDeathHandler(this);
-        new PlayerShopInventoryClickHandler(this);
+        getServer().getPluginManager().registerEvents(new PlayerShopHandler(), this);
         new TeleportPowderHandler(this);
 
         SubCommandHandler commandHandler = new GuardianCommandHandler();
