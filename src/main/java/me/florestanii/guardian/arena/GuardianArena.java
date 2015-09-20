@@ -15,7 +15,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GuardianArena {
     private final Guardian plugin;
@@ -24,8 +27,8 @@ public class GuardianArena {
     private final GuardianLobby lobby;
     private final Map<String, GuardianTeam> teams;
     private GuardianArenaState state = GuardianArenaState.LOBBY;
-    List<ItemSpawner> itemSpawners;
-    GuardianSpawner guardianSpawner;
+    private final List<ItemSpawner> itemSpawners;
+    private final GuardianSpawner guardianSpawner;
 
     int playerCount = 0;
     int endCountdownScheduler = -1;
@@ -48,10 +51,9 @@ public class GuardianArena {
             itemSpawners.add(new ItemSpawner(this, spawnerConfig));
         }
 
-        guardianSpawner = new GuardianSpawner(this, 20 * 120);
+        guardianSpawner = new GuardianSpawner(this, 20 * 120, config.getArenaMiddle());
 
         this.world = config.getWorld();
-
     }
 
     public World getWorld() {
@@ -61,14 +63,9 @@ public class GuardianArena {
     public void joinPlayer(Player player) {
         if (lobby.isFull()) {
             player.sendMessage(ChatColor.DARK_RED + "Diese Arena ist schon voll!");
-            return;
+        } else if (state != GuardianArenaState.LOBBY) {
+            player.sendMessage("Du kannst in diese Arena nicht rein, da sie schon läuft oder offline ist");
         } else {
-
-            if (state != GuardianArenaState.LOBBY) {
-                player.sendMessage("Du kannst in diese Arena nicht rein, da sie schon läuft oder offline ist");
-                return;
-            }
-
             playerCount++;
             lobby.joinPlayer(new GuardianPlayer(player.getUniqueId(), player.getDisplayName()));
             player.getInventory().clear();
@@ -155,7 +152,7 @@ public class GuardianArena {
                         endCountdown--;
 
                     } else {
-                        cancleEndCountdown();
+                        cancelEndCountdown();
                         System.out.println("Arena stoped!");
                         resetArena();
                     }
@@ -165,7 +162,7 @@ public class GuardianArena {
         }
     }
 
-    public void cancleEndCountdown() {
+    public void cancelEndCountdown() {
         plugin.getServer().getScheduler().cancelTask(endCountdownScheduler);
         endCountdownScheduler = -1;
     }
@@ -187,7 +184,7 @@ public class GuardianArena {
 
         for (GuardianTeam team : teams.values()) {
             for (Location location : team.getRespawnBlocks()) {
-                location.getBlock().setType(Material.DIAMOND);
+                location.getBlock().setType(Material.DIAMOND_BLOCK);
             }
         }
 
@@ -203,7 +200,6 @@ public class GuardianArena {
 
     public void startArena(List<GuardianPlayer> players) {
         state = GuardianArenaState.INGAME;
-        Random r = new Random();
         resetArena();
 
         List<GuardianTeam> teams = new ArrayList<>(this.teams.values());

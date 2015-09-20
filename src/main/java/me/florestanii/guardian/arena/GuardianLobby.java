@@ -89,7 +89,6 @@ public class GuardianLobby {
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setPlayerListName(ChatColor.GREEN + player.getDisplayName());
             Util.setTagColor(arena.getPlugin(), arena.getPlugin().getServer().getPlayer(player.getUniqueId()), ChatColor.GREEN);
 
-            System.out.println(getPlayerCount() + " " + minPlayers + " " + controlPlayerCount + " " + !isCountdownStarted());
             if (getPlayerCount() >= minPlayers && controlPlayerCount && !isCountdownStarted()) {
                 startCountdown();
             }
