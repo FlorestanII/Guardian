@@ -46,7 +46,8 @@ public class ArenaCommands implements CommandHandler {
             value = "start",
             permission = "guardian.start",
             description = "Start the game in an arena.",
-            usage = "start <arena name>")
+            usage = "start <arena name>",
+            min = 1, max = 1)
     public void startArena(CommandSender sender, String[] args) {
         GuardianArena arena = guardian.getArena(args[0]);
         if (arena != null) {
