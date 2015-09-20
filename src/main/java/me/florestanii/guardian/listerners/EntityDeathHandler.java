@@ -10,8 +10,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class EntityDeathHandler implements Listener {
-
-    Guardian plugin;
+    private final Guardian plugin;
 
     public EntityDeathHandler(Guardian plugin) {
         this.plugin = plugin;

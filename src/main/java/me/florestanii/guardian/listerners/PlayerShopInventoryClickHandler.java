@@ -214,7 +214,6 @@ public class PlayerShopInventoryClickHandler implements Listener {
     }
 
     public ItemStack getItemStackForOffer(Material mat, int amount, byte damage, String displayname, List<String> lore) {
-
         ItemStack item = new ItemStack(mat, amount, (short) damage);
         ItemMeta meta = item.getItemMeta();
 
@@ -228,11 +227,9 @@ public class PlayerShopInventoryClickHandler implements Listener {
         item.setItemMeta(meta);
 
         return item;
-
     }
 
     public ItemStack getItemStackForOffer(Material mat, int amount, String displayname, Map<Enchantment, Integer> enchs) {
-
         ItemStack item = new ItemStack(mat, amount);
         ItemMeta meta = item.getItemMeta();
         if (displayname != null) {
@@ -245,6 +242,5 @@ public class PlayerShopInventoryClickHandler implements Listener {
         }
 
         return item;
-
     }
 }

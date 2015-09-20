@@ -2,6 +2,7 @@ package me.florestanii.guardian.listerners;
 
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.GuardianArena;
+import me.florestanii.guardian.util.ReflectionUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeathHandler implements Listener {
-    Guardian plugin;
+    private final Guardian plugin;
 
     public PlayerDeathHandler(Guardian plugin) {
         this.plugin = plugin;
@@ -34,19 +35,16 @@ public class PlayerDeathHandler implements Listener {
                 arena.broadcastMessage(arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " wurde von " + arena.getTeamOfPlayer(p.getKiller()).getChatColor() + p.getKiller().getDisplayName() + ChatColor.GRAY + "getötet.");
             }
 
-            //TODO auto-respawn the player
-            /*
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-					
-				@Override
-				public void run() {
-					PacketPlayInClientCommand packet = new PacketPlayInClientCommand(EnumClientCommand.PERFORM_RESPAWN);
-					((CraftPlayer)p).getHandle().playerConnection.a(packet);
-				}
-					
-			}, 20);
-			*/
+                @Override
+                public void run() {
+                    try {
+                        ReflectionUtils.sendRespawnPacket(p);
+                    } catch (Exception e1) {
+                        plugin.getLogger().warning("Could not send respawn packet.");
+                    }
+                }
+            }, 20);
         }
     }
-
 }

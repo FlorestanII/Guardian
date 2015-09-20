@@ -10,8 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class PlayerAttackHandler implements Listener {
-
-    Guardian plugin;
+    private final Guardian plugin;
 
     public PlayerAttackHandler(Guardian plugin) {
         this.plugin = plugin;
@@ -30,7 +29,6 @@ public class PlayerAttackHandler implements Listener {
             } else {
                 e.setCancelled(true);
             }
-
         }
     }
 

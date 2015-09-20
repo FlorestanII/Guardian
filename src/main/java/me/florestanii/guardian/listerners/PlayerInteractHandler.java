@@ -49,7 +49,6 @@ public class PlayerInteractHandler implements Listener {
                 }
             }
         }
-
     }
 
     @EventHandler
@@ -88,22 +87,15 @@ public class PlayerInteractHandler implements Listener {
                         }
 
                         p.openInventory(shopInv);
-
-                        break;
-
-                    default:
                         break;
                 }
-
             } else {
                 e.setCancelled(true);
             }
-
         }
     }
 
     public ItemStack getItemStackForOffer(Material mat, int amount, byte damage, String displayname, List<String> lore) {
-
         ItemStack item = new ItemStack(mat, amount, (short) damage);
         ItemMeta meta = item.getItemMeta();
 
@@ -121,7 +113,6 @@ public class PlayerInteractHandler implements Listener {
     }
 
     public ItemStack getItemStackForOffer(Material mat, int amount, String displayname, Map<Enchantment, Integer> enchs) {
-
         ItemStack item = new ItemStack(mat, amount);
         ItemMeta meta = item.getItemMeta();
         if (displayname != null) {
@@ -134,6 +125,5 @@ public class PlayerInteractHandler implements Listener {
         }
 
         return item;
-
     }
 }

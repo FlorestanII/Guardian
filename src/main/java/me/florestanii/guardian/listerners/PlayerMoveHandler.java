@@ -32,5 +32,4 @@ public class PlayerMoveHandler implements Listener {
             }
         }
     }
-
 }

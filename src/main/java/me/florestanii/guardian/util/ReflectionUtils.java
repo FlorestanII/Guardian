@@ -397,4 +397,13 @@ public class ReflectionUtils {
         return "org.bukkit.craftbukkit." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     }
 
+    public static void sendRespawnPacket(Player p) throws Exception {
+        Object nmsPlayer = null;
+        nmsPlayer = p.getClass().getMethod("getHandle").invoke(p);
+        Object packet = Class.forName(nmsPlayer.getClass().getPackage().getName() + ".PacketPlayInClientCommand").newInstance();
+        Class enumClass = Class.forName(nmsPlayer.getClass().getPackage().getName() + ".EnumClientCommand");
+        packet = packet.getClass().getConstructor(enumClass).newInstance(Enum.valueOf(enumClass, "PERFORM_RESPAWN"));
+        Object con = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
+        con.getClass().getMethod("a", packet.getClass()).invoke(con, packet);
+    }
 }

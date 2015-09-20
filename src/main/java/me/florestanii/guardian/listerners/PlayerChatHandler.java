@@ -9,8 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerChatHandler implements Listener {
-
-    Guardian plugin;
+    private final Guardian plugin;
 
     public PlayerChatHandler(Guardian plugin) {
         this.plugin = plugin;
