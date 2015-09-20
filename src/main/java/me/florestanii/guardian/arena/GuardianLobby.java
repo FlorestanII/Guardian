@@ -13,8 +13,8 @@ public class GuardianLobby {
     private GuardianArena arena;
     HashMap<UUID, GuardianPlayer> players = new HashMap<UUID, GuardianPlayer>();
 
-    int maxPlayers = 8;
-    int minPlayers = 4;
+    final int maxPlayers;
+    final int minPlayers;
 
     int countdownScheduler = -1;
     final int startCountdown = 30;
@@ -27,6 +27,7 @@ public class GuardianLobby {
         this.arena = arena;
         this.location = spawn;
         this.maxPlayers = maxPlayers;
+        this.minPlayers = minPlayers;
     }
 
     public void startCountdown() {
@@ -87,6 +88,8 @@ public class GuardianLobby {
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).getInventory().clear();
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setPlayerListName(ChatColor.GREEN + player.getDisplayName());
             Util.setTagColor(arena.getPlugin(), arena.getPlugin().getServer().getPlayer(player.getUniqueId()), ChatColor.GREEN);
+
+            System.out.println(getPlayerCount() + " " + minPlayers + " " + controlPlayerCount + " " + !isCountdownStarted());
             if (getPlayerCount() >= minPlayers && controlPlayerCount && !isCountdownStarted()) {
                 startCountdown();
             }
@@ -125,16 +128,8 @@ public class GuardianLobby {
         return players.get(uuid);
     }
 
-    public void setMinPlayers(int minPlayers) {
-        this.minPlayers = minPlayers;
-    }
-
     public int getMinPlayers() {
         return minPlayers;
-    }
-
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
     }
 
     public int getMaxPlayers() {
