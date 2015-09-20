@@ -209,6 +209,7 @@ public class ArenaSetupCommands extends SubCommandHandler implements CommandHand
                                 .append(" added.")
                                 .sendTo(player);
                     }
+                    event.setCancelled(true);
                 }
             }
         }, plugin);
