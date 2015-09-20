@@ -27,6 +27,9 @@ public class Guardian extends JavaPlugin implements CommandHandler {
         saveDefaultConfig();
 
         arenas = new HashMap<>();
+        if (!getConfig().isConfigurationSection("arenas")) {
+            getConfig().createSection("arenas");
+        }
         ConfigurationSection arenasConfig = getConfig().getConfigurationSection("arenas");
         for (String key : arenasConfig.getKeys(false)) {
             arenas.put(key, new GuardianArena(this, new GuardianArenaConfig(arenasConfig.getConfigurationSection(key))));
