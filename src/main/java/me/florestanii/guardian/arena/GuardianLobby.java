@@ -80,7 +80,6 @@ public class GuardianLobby {
     }
 
     public void joinPlayer(GuardianPlayer player) {
-
         if (players.size() < maxPlayers) {
             players.put(player.getUniqueId(), player);
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).teleport(arena.getLobbySpawn());
@@ -94,22 +93,14 @@ public class GuardianLobby {
         } else {
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).sendMessage(ChatColor.DARK_RED + "Diese Arena ist schon voll!");
         }
-
     }
 
     public boolean isFull() {
         return players.size() >= maxPlayers;
     }
 
-    public void leftPlayer(GuardianPlayer player) {
+    public void leftPlayer(Player player) {
         players.remove(player.getUniqueId());
-        if (getPlayerCount() < minPlayers && controlPlayerCount && isCountdownStarted()) {
-            cancelCountdown(false);
-        }
-    }
-
-    public void leftPlayer(UUID uuid) {
-        players.remove(uuid);
         if (getPlayerCount() < minPlayers && controlPlayerCount && isCountdownStarted()) {
             cancelCountdown(false);
         }
@@ -152,10 +143,6 @@ public class GuardianLobby {
 
     public boolean isPlayerInLobby(Player player) {
         return players.containsKey(player.getUniqueId());
-    }
-
-    public boolean isPlayerInLobby(UUID uuid) {
-        return players.containsKey(uuid);
     }
 
     public int getPlayerCount() {

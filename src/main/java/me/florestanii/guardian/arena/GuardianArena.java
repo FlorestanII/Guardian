@@ -83,7 +83,7 @@ public class GuardianArena {
             playerCount--;
 
             if (lobby.isPlayerInLobby(p)) {
-                lobby.leftPlayer(p.getUniqueId());
+                lobby.leftPlayer(p);
             } else {
                 final List<GuardianTeam> rivalTeams = getRivalTeamsOfPlayer(p);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
