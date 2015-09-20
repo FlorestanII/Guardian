@@ -97,7 +97,7 @@ public abstract class SubCommandHandler implements org.bukkit.command.CommandExe
         }
 
         onInvalidCommand(sender);
-        return false;
+        return true; //false, so that the default usage is not sent to the sender
     }
 
     private boolean containsAny(String[] haystack, String needle) {

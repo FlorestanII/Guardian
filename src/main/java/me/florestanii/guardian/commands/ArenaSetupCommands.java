@@ -5,6 +5,7 @@ import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import me.florestanii.guardian.arena.config.GuardianTeamConfig;
 import me.florestanii.guardian.arena.config.ItemSpawnerConfig;
+import me.florestanii.guardian.util.commands.CommandHandler;
 import me.florestanii.guardian.util.commands.SubCommandHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,13 +19,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class ArenaSetupCommands extends SubCommandHandler {
+public class ArenaSetupCommands extends SubCommandHandler implements CommandHandler {
     private final Guardian plugin;
     private GuardianArenaConfig arena;
 
     public ArenaSetupCommands(Guardian plugin) {
         super("guardiansetup");
         this.plugin = plugin;
+        addHandlers(this);
     }
 
     @me.florestanii.guardian.util.commands.Command(
