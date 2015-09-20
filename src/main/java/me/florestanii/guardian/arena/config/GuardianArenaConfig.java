@@ -132,9 +132,10 @@ public class GuardianArenaConfig {
             config.getConfigurationSection("teams").set(team.getKey(), team.getValue().getConfig());
         }
 
+        config.createSection("spawners");
         int i = 1;
         for (ItemSpawnerConfig spawner : getItemSpawners()) {
-            config.createSection("teams").set("spawner" + i, spawner.getConfig());
+            config.getConfigurationSection("spawners").set("spawner" + i, spawner.getConfig());
             i++;
         }
 
