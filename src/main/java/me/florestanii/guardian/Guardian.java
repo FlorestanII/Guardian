@@ -6,7 +6,6 @@ import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import me.florestanii.guardian.arena.specialitems.teleportpowder.TeleportPowderHandler;
 import me.florestanii.guardian.listerners.*;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,36 +13,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Guardian extends JavaPlugin {
     private Map<String, GuardianArena> arenas;
 
     @Override
-    public void onLoad() {
-        getConfig();
-        getConfig().options().copyDefaults(true);
-
-        saveConfig();
-    }
-
-    @Override
     public void onEnable() {
-        Location leavePos = new Location(null, 0, 0, 0);
-        Location lobbySpawn = new Location(null, 0, 0, 0);
-        Location redSpawn = new Location(null, 0, 0, 0);
-        Location redRespawnblock1 = new Location(null, 0, 0, 0);
-        Location redRespawnblock2 = new Location(null, 0, 0, 0);
-        Location blueSpawn = new Location(null, 0, 0, 0);
-        Location blueRespawnblock1 = new Location(null, 0, 0, 0);
-        Location blueRespawnblock2 = new Location(null, 0, 0, 0);
-        Location arenaMiddle = new Location(null, 0, 0, 0);
+        saveDefaultConfig();
 
+        arenas = new HashMap<>();
         ConfigurationSection arenasConfig = getConfig().getConfigurationSection("arenas");
         for (String key : arenasConfig.getKeys(false)) {
             arenas.put(key, new GuardianArena(this, new GuardianArenaConfig(arenasConfig.getConfigurationSection(key))));
         }
 
+        //TODO Unregister all these handlers on disable. And register them here, not in their constructors
         new BlockBreakHandler(this);
         new BlockPlaceHandler(this);
         new PlayerDeathHandler(this);
@@ -55,13 +41,7 @@ public class Guardian extends JavaPlugin {
         new PlayerMoveHandler(this);
         new EntityDeathHandler(this);
         new PlayerShopInventoryClickHandler(this);
-
         new TeleportPowderHandler(this);
-    }
-
-    @Override
-    public void onDisable() {
-        saveConfig();
     }
 
     @Override
