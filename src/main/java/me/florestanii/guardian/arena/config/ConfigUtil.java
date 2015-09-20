@@ -14,10 +14,24 @@ public class ConfigUtil {
                 (float) config.getDouble("pitch"));
     }
 
+    public static void setFullLocation(ConfigurationSection config, Location location) {
+        config.set("x", location.getX());
+        config.set("y", location.getY());
+        config.set("z", location.getZ());
+        config.set("yaw", location.getYaw());
+        config.set("pitch", location.getPitch());
+    }
+
     public static Location getLocation(ConfigurationSection config) {
         return new Location(Bukkit.getWorld(config.getString("world")),
                 config.getDouble("x"),
                 config.getDouble("y"),
                 config.getDouble("z"));
+    }
+
+    public static void setLocation(ConfigurationSection config, Location location) {
+        config.set("x", location.getX());
+        config.set("y", location.getY());
+        config.set("z", location.getZ());
     }
 }

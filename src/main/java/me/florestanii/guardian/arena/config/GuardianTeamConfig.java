@@ -3,16 +3,20 @@ package me.florestanii.guardian.arena.config;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class GuardianTeamConfig {
-    private final String name;
-    private final ChatColor color;
-    private final Location spawn;
-    private final List<Location> respawnBlocks = new ArrayList<>();
+    private String name;
+    private ChatColor color;
+    private Location spawn;
+    private List<Location> respawnBlocks = new ArrayList<>();
+
+    public GuardianTeamConfig() {
+    }
 
     public GuardianTeamConfig(ConfigurationSection config) {
         name = config.getString("name");
@@ -29,15 +33,54 @@ public class GuardianTeamConfig {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public ChatColor getColor() {
         return color;
+    }
+
+    public void setColor(ChatColor color) {
+        this.color = color;
     }
 
     public Location getSpawn() {
         return spawn;
     }
 
+    public void setSpawn(Location spawn) {
+        this.spawn = spawn;
+    }
+
     public List<Location> getRespawnBlocks() {
         return Collections.unmodifiableList(respawnBlocks);
+    }
+
+    public void addRespawnBlock(Location location) {
+        respawnBlocks.add(location);
+    }
+
+    public void removeRespawnBlock(Location location) {
+        respawnBlocks.remove(location);
+    }
+
+    public boolean isRespawnBlock(Location location) {
+        return respawnBlocks.contains(location);
+    }
+
+    public ConfigurationSection getConfig() {
+        ConfigurationSection config = new MemoryConfiguration();
+        config.set("name", getName());
+        config.set("color", getColor().name());
+        ConfigUtil.setFullLocation(config.getConfigurationSection("spawn"), getSpawn());
+
+        int i = 0;
+        for (Location respawnBlock : getRespawnBlocks()) {
+            ConfigUtil.setLocation(config.getConfigurationSection("respawnBlocks").getConfigurationSection("block" + i), respawnBlock);
+            i++;
+        }
+
+        return config;
     }
 }

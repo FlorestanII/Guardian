@@ -5,6 +5,7 @@ import me.florestanii.guardian.arena.GuardianArena;
 import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import me.florestanii.guardian.arena.specialitems.teleportpowder.TeleportPowderHandler;
 import me.florestanii.guardian.commands.ArenaCommands;
+import me.florestanii.guardian.commands.ArenaSetupCommands;
 import me.florestanii.guardian.commands.GuardianCommandHandler;
 import me.florestanii.guardian.listerners.*;
 import me.florestanii.guardian.util.commands.CommandHandler;
@@ -48,6 +49,8 @@ public class Guardian extends JavaPlugin implements CommandHandler {
         SubCommandHandler commandHandler = new GuardianCommandHandler();
         commandHandler.addHandlers(this, new ArenaCommands(this));
         getCommand("guardian").setExecutor(commandHandler);
+
+        getCommand("guardiansetup").setExecutor(new ArenaSetupCommands(this));
     }
 
     @me.florestanii.guardian.util.commands.Command(
@@ -86,5 +89,11 @@ public class Guardian extends JavaPlugin implements CommandHandler {
 
     public static TextBuilder prefix() {
         return TextBuilder.create("[Guardian] ").gold();
+    }
+
+    public void addArena(GuardianArenaConfig arena, String shortName) {
+        arenas.put(shortName, new GuardianArena(this, arena));
+        getConfig().getConfigurationSection("arenas").set(shortName, arena.getConfig());
+        saveConfig();
     }
 }

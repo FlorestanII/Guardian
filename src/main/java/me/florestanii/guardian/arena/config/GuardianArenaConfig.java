@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 
 import java.util.*;
 
@@ -106,7 +107,39 @@ public class GuardianArenaConfig {
         return maxPlayers;
     }
 
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
     public int getMinPlayers() {
         return minPlayers;
+    }
+
+    public void setMinPlayers(int minPlayers) {
+        this.minPlayers = minPlayers;
+    }
+
+    public ConfigurationSection getConfig() {
+        ConfigurationSection config = new MemoryConfiguration();
+
+        config.set("world", getWorld().getName());
+        ConfigUtil.setFullLocation(config.getConfigurationSection("leave"), getLeaveLocation());
+        ConfigUtil.setFullLocation(config.getConfigurationSection("lobby"), getLobbyLocation());
+        ConfigUtil.setFullLocation(config.getConfigurationSection("middle"), getArenaMiddle());
+
+        for (Map.Entry<String, GuardianTeamConfig> team : getTeams().entrySet()) {
+            config.getConfigurationSection("teams").set(team.getKey(), team.getValue().getConfig());
+        }
+
+        int i = 1;
+        for (ItemSpawnerConfig spawner : getItemSpawners()) {
+            config.getConfigurationSection("teams").set("spawner" + i, spawner.getConfig());
+            i++;
+        }
+
+        config.set("minPlayers", 2);
+        config.set("maxPlayers", 8);
+
+        return config;
     }
 }
