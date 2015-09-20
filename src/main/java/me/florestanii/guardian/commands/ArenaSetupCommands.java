@@ -31,7 +31,6 @@ public class ArenaSetupCommands extends SubCommandHandler implements CommandHand
 
     @me.florestanii.guardian.util.commands.Command(
             value = "start",
-            min = 1, max = 1,
             permission = "guardian.admin.setup",
             description = "Start creating a new arena in this world.")
     public void start(Player player) {
