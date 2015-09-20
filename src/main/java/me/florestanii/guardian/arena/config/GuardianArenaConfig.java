@@ -123,9 +123,10 @@ public class GuardianArenaConfig {
         ConfigurationSection config = new MemoryConfiguration();
 
         config.set("world", getWorld().getName());
-        ConfigUtil.setFullLocation(config.getConfigurationSection("leave"), getLeaveLocation());
-        ConfigUtil.setFullLocation(config.getConfigurationSection("lobby"), getLobbyLocation());
-        ConfigUtil.setFullLocation(config.getConfigurationSection("middle"), getArenaMiddle());
+        ConfigUtil.setFullLocation(config.createSection("leave"), getLeaveLocation());
+        ConfigUtil.setFullLocation(config.createSection("lobby"), getLobbyLocation());
+        ConfigUtil.setFullLocation(config.createSection("middle"), getArenaMiddle());
+        config.createSection("teams");
 
         for (Map.Entry<String, GuardianTeamConfig> team : getTeams().entrySet()) {
             config.getConfigurationSection("teams").set(team.getKey(), team.getValue().getConfig());
@@ -133,7 +134,7 @@ public class GuardianArenaConfig {
 
         int i = 1;
         for (ItemSpawnerConfig spawner : getItemSpawners()) {
-            config.getConfigurationSection("teams").set("spawner" + i, spawner.getConfig());
+            config.createSection("teams").set("spawner" + i, spawner.getConfig());
             i++;
         }
 

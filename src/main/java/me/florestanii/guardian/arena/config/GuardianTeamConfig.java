@@ -73,11 +73,12 @@ public class GuardianTeamConfig {
         ConfigurationSection config = new MemoryConfiguration();
         config.set("name", getName());
         config.set("color", getColor().name());
-        ConfigUtil.setFullLocation(config.getConfigurationSection("spawn"), getSpawn());
+        ConfigUtil.setFullLocation(config.createSection("spawn"), getSpawn());
+        config.createSection("respawnBlocks");
 
         int i = 0;
         for (Location respawnBlock : getRespawnBlocks()) {
-            ConfigUtil.setLocation(config.getConfigurationSection("respawnBlocks").getConfigurationSection("block" + i), respawnBlock);
+            ConfigUtil.setLocation(config.getConfigurationSection("respawnBlocks").createSection("block" + i), respawnBlock);
             i++;
         }
 
