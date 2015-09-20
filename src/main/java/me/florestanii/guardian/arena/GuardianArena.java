@@ -3,6 +3,8 @@ package me.florestanii.guardian.arena;
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import me.florestanii.guardian.arena.config.GuardianTeamConfig;
+import me.florestanii.guardian.arena.config.ItemSpawnerConfig;
+import me.florestanii.guardian.arena.spawner.ItemSpawner;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
 import me.florestanii.guardian.arena.team.GuardianTeam;
 import me.florestanii.guardian.util.ColorConverter;
@@ -22,8 +24,7 @@ public class GuardianArena {
     private final GuardianLobby lobby;
     private final Map<String, GuardianTeam> teams;
     private GuardianArenaState state = GuardianArenaState.LOBBY;
-    EmeraldSpawner emeraldSpawner;
-    DiamondSpawner diamondSpawner;
+    List<ItemSpawner> itemSpawners;
     GuardianSpawner guardianSpawner;
 
     int playerCount = 0;
@@ -39,13 +40,15 @@ public class GuardianArena {
             teams.put(teamConfig.getKey(), new GuardianTeam(this, teamConfig.getValue()));
         }
 
-        lobby = new GuardianLobby(this, config.getLobbyLocation(), 8, 2);
+        lobby = new GuardianLobby(this, config.getLobbyLocation(), config.getMaxPlayers(), config.getMinPlayers());
         leavePos = config.getLeaveLocation();
 
-        emeraldSpawner = new EmeraldSpawner(this, (int) (20 * 2f));
-        diamondSpawner = new DiamondSpawner(this, (int) (20 * 45f));
+        itemSpawners = new ArrayList<>();
+        for (ItemSpawnerConfig spawnerConfig : config.getItemSpawners()) {
+            itemSpawners.add(new ItemSpawner(this, spawnerConfig));
+        }
 
-        guardianSpawner = new GuardianSpawner(this, (int) (20 * 120));
+        guardianSpawner = new GuardianSpawner(this, 20 * 120);
 
         this.world = config.getWorld();
 
@@ -176,8 +179,9 @@ public class GuardianArena {
         state = GuardianArenaState.OFFLINE;
 
         playerCount = 0;
-        emeraldSpawner.stopSpawner();
-        diamondSpawner.stopSpawner();
+        for (ItemSpawner spawner : itemSpawners) {
+            spawner.stopSpawner();
+        }
 
         guardianSpawner.stopSpawner();
 
@@ -212,8 +216,9 @@ public class GuardianArena {
             givePlayerStartKit(plugin.getServer().getPlayer(player.getUniqueId()));
         }
 
-        emeraldSpawner.startSpawner();
-        diamondSpawner.startSpawner();
+        for (ItemSpawner spawner : itemSpawners) {
+            spawner.startSpawner();
+        }
         guardianSpawner.startSpawner();
     }
 
@@ -231,14 +236,6 @@ public class GuardianArena {
 
     public GuardianTeam getTeam(String name) {
         return teams.get(name);
-    }
-
-    public EmeraldSpawner getEmeraldSpawner() {
-        return emeraldSpawner;
-    }
-
-    public DiamondSpawner getDiamondSpawner() {
-        return diamondSpawner;
     }
 
     public GuardianSpawner getGuardianSpawner() {

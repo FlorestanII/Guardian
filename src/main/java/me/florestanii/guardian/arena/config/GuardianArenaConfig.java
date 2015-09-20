@@ -14,6 +14,8 @@ public class GuardianArenaConfig {
     private Location arenaMiddle;
     private Map<String, GuardianTeamConfig> teams;
     private List<ItemSpawnerConfig> itemSpawners;
+    private int maxPlayers;
+    private int minPlayers;
 
     public GuardianArenaConfig(ConfigurationSection config) {
         this.world = Bukkit.getWorld(config.getString("world"));
@@ -33,7 +35,8 @@ public class GuardianArenaConfig {
             itemSpawners.add(new ItemSpawnerConfig(itemSpawnersConfig.getConfigurationSection(itemSpawnerKey)));
         }
 
-        //TODO minPlayers and maxPlayers
+        minPlayers = config.getInt("minPlayers", 2);
+        maxPlayers = config.getInt("maxPlayers", 8);
     }
 
     public GuardianArenaConfig() {
@@ -97,5 +100,13 @@ public class GuardianArenaConfig {
         if (i >= 0 && i < itemSpawners.size()) {
             itemSpawners.remove(i);
         }
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public int getMinPlayers() {
+        return minPlayers;
     }
 }

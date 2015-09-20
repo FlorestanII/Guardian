@@ -92,9 +92,6 @@ public class Guardian extends JavaPlugin {
             } else if (args[0].equalsIgnoreCase("help")) {
                 //TODO Spieler hilfe senden.
             } else if (args[0].equalsIgnoreCase("reload")) {
-                for (GuardianArena arena : arenas.values()) {
-                    arena.getEmeraldSpawner().getLocations().clear();
-                }
                 reloadConfig();
             } else {
                 p.sendMessage("Unknown command. Type /guardian help for a full list of the commands.");
