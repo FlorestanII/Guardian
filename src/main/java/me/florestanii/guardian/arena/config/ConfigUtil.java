@@ -15,6 +15,7 @@ public class ConfigUtil {
     }
 
     public static void setFullLocation(ConfigurationSection config, Location location) {
+        config.set("world", location.getWorld().getName());
         config.set("x", location.getX());
         config.set("y", location.getY());
         config.set("z", location.getZ());
@@ -30,6 +31,7 @@ public class ConfigUtil {
     }
 
     public static void setLocation(ConfigurationSection config, Location location) {
+        config.set("world", location.getWorld().getName());
         config.set("x", location.getX());
         config.set("y", location.getY());
         config.set("z", location.getZ());
