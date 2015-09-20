@@ -1,8 +1,11 @@
 package me.florestanii.guardian.arena;
 
 import me.florestanii.guardian.Guardian;
+import me.florestanii.guardian.arena.config.GuardianArenaConfig;
+import me.florestanii.guardian.arena.config.GuardianTeamConfig;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
 import me.florestanii.guardian.arena.team.GuardianTeam;
+import me.florestanii.guardian.util.ColorConverter;
 import me.florestanii.guardian.util.Util;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -10,67 +13,46 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class GuardianArena {
-
-    Guardian plugin;
-
-    World world;
-
-    Location leavePos;
-
-    GuardianLobby lobby;
-
-    GuardianTeam blue;
-    GuardianTeam red;
-
-    GuardianArenaState state = GuardianArenaState.OFFLINE;
-
+    private final Guardian plugin;
+    private final World world;
+    private final Location leavePos;
+    private final GuardianLobby lobby;
+    private final Map<String, GuardianTeam> teams;
+    private GuardianArenaState state = GuardianArenaState.LOBBY;
     EmeraldSpawner emeraldSpawner;
     DiamondSpawner diamondSpawner;
-
     GuardianSpawner guardianSpawner;
 
     int playerCount = 0;
-
     int endCountdownScheduler = -1;
     int endStartCountdown = 10;
     int endCountdown = endStartCountdown;
 
-    public GuardianArena(Guardian plugin, World world) {
-
-        this(plugin);
-        this.world = world;
-
-    }
-
-    public GuardianArena(Guardian plugin) {
+    public GuardianArena(Guardian plugin, GuardianArenaConfig config) {
         this.plugin = plugin;
 
-        blue = new GuardianTeam(this, "Blau");
-        blue.setChatColor(ChatColor.BLUE);
+        teams = new HashMap<>();
+        for (Map.Entry<String, GuardianTeamConfig> teamConfig : config.getTeams().entrySet()) {
+            teams.put(teamConfig.getKey(), new GuardianTeam(this, teamConfig.getValue()));
+        }
 
-        red = new GuardianTeam(this, "Rot");
-        red.setChatColor(ChatColor.RED);
-
-        lobby = new GuardianLobby(this, 8, 2);
+        lobby = new GuardianLobby(this, config.getLobbyLocation(), 8, 2);
+        leavePos = config.getLeaveLocation();
 
         emeraldSpawner = new EmeraldSpawner(this, (int) (20 * 2f));
         diamondSpawner = new DiamondSpawner(this, (int) (20 * 45f));
 
         guardianSpawner = new GuardianSpawner(this, (int) (20 * 120));
 
+        this.world = config.getWorld();
+
     }
 
     public World getWorld() {
         return world;
-    }
-
-    public void setWorld(World world) {
-        this.world = world;
     }
 
     public void joinPlayer(Player player) {
@@ -94,39 +76,29 @@ public class GuardianArena {
     }
 
     public void leavePlayer(final Player p) {
-
         if (isPlayerInArena(p)) {
             playerCount--;
 
             if (lobby.isPlayerInLobby(p)) {
                 lobby.leftPlayer(p.getUniqueId());
             } else {
-                final GuardianTeam team = plugin.getArena().getTeamOfPlayer(p.getUniqueId());
-                final GuardianTeam rivalTeam = plugin.getArena().getRivalTeamOfPlayer(p.getUniqueId());
+                final List<GuardianTeam> rivalTeams = getRivalTeamsOfPlayer(p);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 
                     @Override
                     public void run() {
-                        if (team.getPlayerCount() - 1 <= 0) {
-
-                            broadcastMessage(ChatColor.GREEN + "Team " + rivalTeam.getChatColor() + rivalTeam.getName() + ChatColor.GREEN + " hat gewonnen!");
-                            broadcastSound(Sound.FIREWORK_LAUNCH);
-                            startEndCountdown();
-
-                        } else if (rivalTeam.getPlayerCount() - 1 <= 0) {
-
-                            broadcastMessage(ChatColor.GREEN + "Team " + team.getChatColor() + team.getName() + ChatColor.GREEN + " hat gewonnen!");
+                        //player has left and thus the rival team wins if there is only one team left
+                        if (rivalTeams.size() == 1) {
+                            GuardianTeam winner = rivalTeams.get(0);
+                            broadcastMessage(ChatColor.GREEN + "Team " + winner.getChatColor() + winner.getName() + ChatColor.GREEN + " hat gewonnen!");
                             broadcastSound(Sound.FIREWORK_LAUNCH);
                             startEndCountdown();
 
                         }
                     }
                 }, 25);
-                if (red.isPlayerInTeam(p)) {
-                    red.removePlayer(p.getUniqueId());
-                } else if (blue.isPlayerInTeam(p)) {
-                    blue.removePlayer(p.getUniqueId());
-                }
+
+                getTeamOfPlayer(p).removePlayer(p);
             }
 
             p.getInventory().clear();
@@ -155,18 +127,12 @@ public class GuardianArena {
         p.getInventory().addItem(new ItemStack(Material.WOOD_SWORD));
     }
 
-    public void givePlayerLeatherArmor(Player p) {
-        if (getTeamRed().isPlayerInTeam(p)) {
-            p.getInventory().setHelmet(Util.getColeredLeatherArmor(Material.LEATHER_HELMET, org.bukkit.Color.RED));
-            p.getInventory().setChestplate(Util.getColeredLeatherArmor(Material.LEATHER_CHESTPLATE, org.bukkit.Color.RED));
-            p.getInventory().setLeggings(Util.getColeredLeatherArmor(Material.LEATHER_LEGGINGS, org.bukkit.Color.RED));
-            p.getInventory().setBoots(Util.getColeredLeatherArmor(Material.LEATHER_BOOTS, org.bukkit.Color.RED));
-        } else {
-            p.getInventory().setHelmet(Util.getColeredLeatherArmor(Material.LEATHER_HELMET, org.bukkit.Color.BLUE));
-            p.getInventory().setChestplate(Util.getColeredLeatherArmor(Material.LEATHER_CHESTPLATE, org.bukkit.Color.BLUE));
-            p.getInventory().setLeggings(Util.getColeredLeatherArmor(Material.LEATHER_LEGGINGS, org.bukkit.Color.BLUE));
-            p.getInventory().setBoots(Util.getColeredLeatherArmor(Material.LEATHER_BOOTS, org.bukkit.Color.BLUE));
-        }
+    public void givePlayerLeatherArmor(Player player) {
+        Color color = ColorConverter.convertToColor(getTeamOfPlayer(player).getChatColor());
+        player.getInventory().setHelmet(Util.getColeredLeatherArmor(Material.LEATHER_HELMET, color));
+        player.getInventory().setChestplate(Util.getColeredLeatherArmor(Material.LEATHER_CHESTPLATE, color));
+        player.getInventory().setLeggings(Util.getColeredLeatherArmor(Material.LEATHER_LEGGINGS, color));
+        player.getInventory().setBoots(Util.getColeredLeatherArmor(Material.LEATHER_BOOTS, color));
     }
 
     public void startEndCountdown() {
@@ -203,8 +169,9 @@ public class GuardianArena {
 
     public void resetArena() {
         lobby.kickAllPlayers();
-        red.kickAllPlayers();
-        blue.kickAllPlayers();
+        for (GuardianTeam team : teams.values()) {
+            team.kickAllPlayers();
+        }
 
         state = GuardianArenaState.OFFLINE;
 
@@ -214,14 +181,13 @@ public class GuardianArena {
 
         guardianSpawner.stopSpawner();
 
-        for (Location location : red.getRespawnBlocks()) {
-            location.getBlock().setType(Material.DIAMOND);
-        }
-        for (Location location : blue.getRespawnBlocks()) {
-            location.getBlock().setType(Material.DIAMOND);
+        for (GuardianTeam team : teams.values()) {
+            for (Location location : team.getRespawnBlocks()) {
+                location.getBlock().setType(Material.DIAMOND);
+            }
         }
 
-        for (Entity e : world.getEntities()) {
+        for (Entity e : world.getEntities()) { //TODO only remove entities that are inside the arena
             if (!(e instanceof Villager) && !(e instanceof Player)) {
                 e.remove();
             }
@@ -231,30 +197,19 @@ public class GuardianArena {
         state = GuardianArenaState.LOBBY;
     }
 
-    public void startArena(ArrayList<GuardianPlayer> players) {
+    public void startArena(List<GuardianPlayer> players) {
         state = GuardianArenaState.INGAME;
         Random r = new Random();
         resetArena();
 
+        List<GuardianTeam> teams = new ArrayList<>(this.teams.values());
+        int i = 0;
         for (GuardianPlayer player : players) {
             plugin.getServer().getPlayer(player.getUniqueId()).getInventory().clear();
             Util.healPlayer(plugin.getServer().getPlayer(player.getUniqueId()));
-            if (r.nextInt(2) == 0) {
-                if (red.getPlayerCount() < (int) (playerCount / 2)) {
-                    red.joinPlayer(player);
-                } else {
-                    blue.joinPlayer(player);
-                }
-            } else {
-                if (blue.getPlayerCount() < (int) (playerCount / 2)) {
-                    blue.joinPlayer(player);
-                } else {
-                    red.joinPlayer(player);
-                }
-
-            }
+            teams.get(i).joinPlayer(player);
+            i = (i + 1) % teams.size(); //assign teams using round-robin
             givePlayerStartKit(plugin.getServer().getPlayer(player.getUniqueId()));
-
         }
 
         emeraldSpawner.startSpawner();
@@ -262,16 +217,8 @@ public class GuardianArena {
         guardianSpawner.startSpawner();
     }
 
-    public void setLeavePos(Location leavePos) {
-        this.leavePos = leavePos;
-    }
-
-    public void setLobbySpawn(Location spawn) {
-        lobby.setSpawn(spawn);
-    }
-
     public Location getLobbySpawn() {
-        return lobby.getSpawn();
+        return lobby.getLocation();
     }
 
     public GuardianLobby getLobby() {
@@ -279,18 +226,11 @@ public class GuardianArena {
     }
 
     public boolean isPlayerInArena(Player p) {
-        if (red.isPlayerInTeam(p) || blue.isPlayerInTeam(p) || lobby.isPlayerInLobby(p)) {
-            return true;
-        }
-        return false;
+        return lobby.isPlayerInLobby(p) || getTeamOfPlayer(p) != null;
     }
 
-    public GuardianTeam getTeamBlue() {
-        return blue;
-    }
-
-    public GuardianTeam getTeamRed() {
-        return red;
+    public GuardianTeam getTeam(String name) {
+        return teams.get(name);
     }
 
     public EmeraldSpawner getEmeraldSpawner() {
@@ -305,34 +245,27 @@ public class GuardianArena {
         return guardianSpawner;
     }
 
-    public GuardianPlayer getPlayer(UUID uuid) {
-        if (red.isPlayerInTeam(uuid)) {
-            return red.getPlayer(uuid);
-        } else if (blue.isPlayerInTeam(uuid)) {
-            return blue.getPlayer(uuid);
-        } else {
-            return null;
-        }
+    public GuardianPlayer getPlayer(Player player) {
+        return getTeamOfPlayer(player).getPlayer(player);
     }
 
-    public GuardianTeam getTeamOfPlayer(UUID uuid) {
-        if (red.isPlayerInTeam(uuid)) {
-            return red;
-        } else if (blue.isPlayerInTeam(uuid)) {
-            return blue;
-        } else {
-            return null;
+    public GuardianTeam getTeamOfPlayer(Player player) {
+        for (GuardianTeam team : teams.values()) {
+            if (team.isPlayerInTeam(player)) {
+                return team;
+            }
         }
+        return null;
     }
 
-    public GuardianTeam getRivalTeamOfPlayer(UUID uuid) {
-        if (red.isPlayerInTeam(uuid)) {
-            return blue;
-        } else if (blue.isPlayerInTeam(uuid)) {
-            return red;
-        } else {
-            return null;
+    public List<GuardianTeam> getRivalTeamsOfPlayer(Player player) {
+        List<GuardianTeam> rivalTeams = new ArrayList<>(teams.size() - 1);
+        for (GuardianTeam team : teams.values()) {
+            if (!team.isPlayerInTeam(player)) {
+                rivalTeams.add(team);
+            }
         }
+        return rivalTeams;
     }
 
     public Guardian getPlugin() {
@@ -355,19 +288,17 @@ public class GuardianArena {
     }
 
     public void broadcastMessage(String msg) {
-        red.broadcastMessage(msg);
-        blue.broadcastMessage(msg);
+        for (GuardianTeam team : teams.values()) {
+            team.broadcastMessage(msg);
+        }
         lobby.broadcastMessage(msg);
     }
 
     public void broadcastSound(Sound sound) {
-        red.broadcastSound(sound);
-        blue.broadcastSound(sound);
+        for (GuardianTeam team : teams.values()) {
+            team.broadcastSound(sound);
+        }
         lobby.broadcastSound(sound);
-    }
-
-    public boolean isArenaReady() {
-        return leavePos != null && blue != null && red != null && lobby != null && world != null && plugin != null && red.isReady() && blue.isReady() && lobby.isReady();
     }
 
     public GuardianArenaState getArenaState() {

@@ -38,7 +38,7 @@ public class TeleportPowderHandler implements Listener {
 
                             @Override
                             public void run() {
-                                e.getPlayer().teleport(arena.getTeamOfPlayer(e.getPlayer().getUniqueId()).getSpawn());
+                                e.getPlayer().teleport(arena.getTeamOfPlayer(e.getPlayer()).getSpawn());
                                 Util.removeInventoryItems(e.getPlayer().getInventory(), Material.SULPHUR, 1);
                             }
 

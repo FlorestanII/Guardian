@@ -1,6 +1,7 @@
 package me.florestanii.guardian.listerners;
 
 import me.florestanii.guardian.Guardian;
+import me.florestanii.guardian.arena.GuardianArena;
 import me.florestanii.guardian.util.Util;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -21,8 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayerInteractHandler implements Listener {
-
-    Guardian plugin;
+    private final Guardian plugin;
 
     public PlayerInteractHandler(Guardian plugin) {
         this.plugin = plugin;
@@ -34,8 +34,9 @@ public class PlayerInteractHandler implements Listener {
         if (e.getClickedBlock() == null) return;
 
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (plugin.getArena().isPlayerInArena(e.getPlayer())) {
-                if (plugin.getArena().getLobby().isPlayerInLobby(e.getPlayer())) {
+            GuardianArena arena = plugin.getArena(e.getPlayer());
+            if (arena != null) {
+                if (arena.getLobby().isPlayerInLobby(e.getPlayer())) {
                     e.setCancelled(true);
                 } else {
                     e.setCancelled(true);
@@ -59,19 +60,15 @@ public class PlayerInteractHandler implements Listener {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler
     public void onInteractEntity(PlayerInteractEntityEvent e) {
         if (e.getRightClicked() instanceof Villager) {
             Player p = e.getPlayer();
-            if (plugin.getArena().isPlayerInArena(p)) {
-
+            if (plugin.isPlayerInArena(p)) {
                 e.setCancelled(true);
 
                 switch (e.getRightClicked().getCustomName() == null ? "" : e.getRightClicked().getCustomName()) {
-
                     case "Shop":
-
                         Inventory shopInv = plugin.getServer().createInventory(null, 27, "Shop");
 
                         for (int i = 0; i < 10; i++) {

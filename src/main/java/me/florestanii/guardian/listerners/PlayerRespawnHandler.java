@@ -10,8 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PlayerRespawnHandler implements Listener {
-
-    Guardian plugin;
+    private final Guardian plugin;
 
     public PlayerRespawnHandler(Guardian plugin) {
         this.plugin = plugin;
@@ -24,14 +23,14 @@ public class PlayerRespawnHandler implements Listener {
         final GuardianArena arena = plugin.getArena(p);
 
         if (arena != null) {
-            if (arena.getTeamOfPlayer(p.getUniqueId()).canRespawn()) {
-                e.setRespawnLocation(arena.getTeamOfPlayer(p.getUniqueId()).getSpawn());
+            if (arena.getTeamOfPlayer(p).canRespawn()) {
+                e.setRespawnLocation(arena.getTeamOfPlayer(p).getSpawn());
                 p.sendMessage(ChatColor.YELLOW + "Du konntest respawnen, weil du noch mindestens einen Respawnblock hast.");
                 arena.givePlayerLeatherArmor(p);
             } else {
                 e.setRespawnLocation(arena.getLeavePos());
                 p.sendMessage(ChatColor.DARK_RED + "Du bist nun ausgeschieden!");
-                final GuardianTeam team = arena.getTeamOfPlayer(p.getUniqueId());
+                final GuardianTeam team = arena.getTeamOfPlayer(p);
                 arena.kickPlayer(p, team.getChatColor() + p.getDisplayName() + ChatColor.GRAY + " ist nun ausgeschieden!");
             }
         }

@@ -3,6 +3,7 @@ package me.florestanii.guardian.listerners;
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.GuardianArena;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
+import me.florestanii.guardian.arena.team.GuardianTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -27,31 +28,32 @@ public class BlockBreakHandler implements Listener {
                 e.setCancelled(true);
             } else {
                 if (e.getBlock().getType() != Material.DIAMOND_BLOCK) {
+                    e.getPlayer().sendMessage(ChatColor.DARK_RED + "Du darfst diesen Block nicht zerstören.");
                     e.setCancelled(true);
-                    e.getPlayer().sendMessage(ChatColor.DARK_RED + "Du darfst den Block " + ChatColor.YELLOW + e.getBlock().getType() + ChatColor.DARK_RED + " nicht zerstören!");
                 } else {
-                    GuardianPlayer player = arena.getPlayer(e.getPlayer().getUniqueId());
-                    if (arena.getTeamOfPlayer(player.getUniqueId()).isOwnRespawnblock(e.getBlock().getLocation())) {
+                    GuardianPlayer player = arena.getPlayer(e.getPlayer());
+                    if (arena.getTeamOfPlayer(player.getBukkitPlayer()).isOwnRespawnblock(e.getBlock().getLocation())) {
                         e.setCancelled(true);
-                        e.getPlayer().sendMessage(ChatColor.DARK_RED + "Du kannst deinen eigenen respawnblock nicht abbauen!");
-                    } else if (arena.getRivalTeamOfPlayer(player.getUniqueId()).isOwnRespawnblock(e.getBlock().getLocation())) {
-
-                        if (arena.getTeamRed().isPlayerInTeam(player.getUniqueId())) {
-                            arena.broadcastMessage(ChatColor.BLUE + "Ein Respawnblock von Team Blau wurde von " + ChatColor.RED + e.getPlayer().getDisplayName() + ChatColor.BLUE + " zerstört!");
-                        } else {
-                            arena.broadcastMessage(ChatColor.RED + "Ein Respawnblock von Team Rot wurde von " + ChatColor.BLUE + e.getPlayer().getDisplayName() + ChatColor.RED + " zerstört!");
-                        }
-                        arena.broadcastSound(Sound.WITHER_DEATH);
-                        e.getBlock().setType(Material.AIR);
-                        e.setCancelled(true);
+                        e.getPlayer().sendMessage(ChatColor.DARK_RED + "Du kannst deinen eigenen Respawnblock nicht abbauen!");
                     } else {
+                        for (GuardianTeam team : arena.getRivalTeamsOfPlayer(player.getBukkitPlayer())) {
+                            if (team.isOwnRespawnblock(e.getBlock().getLocation())) {
+                                arena.broadcastMessage(ChatColor.BLUE + "Ein Respawnblock von Team " + team.getChatColor() + team.getName() +
+                                        " wurde von " + ChatColor.RED + e.getPlayer().getDisplayName() + ChatColor.BLUE + " zerstört!");
+                                arena.broadcastSound(Sound.WITHER_DEATH);
+                                e.getBlock().setType(Material.AIR);
+                                e.setCancelled(true);
+                                return;
+                            }
+                        }
+
+                        e.getPlayer().sendMessage(ChatColor.DARK_RED + "Du darfst diesen Block nicht zerstören.");
                         e.setCancelled(true);
-                        e.getPlayer().sendMessage(ChatColor.DARK_RED + "Du darfst diesen Block nicht zerstören, da dies keine Respawnblock ist.");
                     }
                 }
             }
         } else {
-            if (e.getPlayer().hasPermission("guardian.admin.build")) {
+            if (e.getPlayer().hasPermission("guardian.admin.build")) { //TODO only block building if the block is inside of an arena
                 e.setCancelled(false);
             } else {
                 e.setCancelled(true);

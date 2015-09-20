@@ -1,6 +1,7 @@
 package me.florestanii.guardian.arena.team;
 
 import me.florestanii.guardian.arena.GuardianArena;
+import me.florestanii.guardian.arena.config.GuardianTeamConfig;
 import me.florestanii.guardian.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,28 +15,19 @@ import java.util.List;
 import java.util.UUID;
 
 public class GuardianTeam {
-    private GuardianArena arena;
-    private String name;
-    private HashMap<UUID, GuardianPlayer> players = new HashMap<>();
-
-    private List<Location> respawnBlocks;
-    private Location spawn;
+    private final GuardianArena arena;
+    private final String name;
+    private final HashMap<UUID, GuardianPlayer> players = new HashMap<>();
+    private final List<Location> respawnBlocks;
+    private final Location spawn;
 
     ChatColor chatColor = ChatColor.WHITE;
 
-    public GuardianTeam(GuardianArena arena, Location spawn, String name) {
+    public GuardianTeam(GuardianArena arena, GuardianTeamConfig guardianTeamConfig) {
         this.arena = arena;
-        this.spawn = spawn;
-        this.name = name;
-    }
-
-    public GuardianTeam(GuardianArena arena, String name) {
-        this.arena = arena;
-        this.name = name;
-    }
-
-    public void setSpawn(Location spawn) {
-        this.spawn = spawn;
+        this.name = guardianTeamConfig.getName();
+        this.respawnBlocks = guardianTeamConfig.getRespawnBlocks();
+        this.spawn = guardianTeamConfig.getSpawn();
     }
 
     public ChatColor getChatColor() {
@@ -53,7 +45,7 @@ public class GuardianTeam {
         Util.setTagColor(arena.getPlugin(), arena.getPlugin().getServer().getPlayer(player.getUniqueId()), chatColor);
     }
 
-    public void removePlayer(GuardianPlayer player) {
+    public void removePlayer(Player player) {
         players.remove(player.getUniqueId());
         arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setPlayerListName(player.getDisplayName());
     }
@@ -93,16 +85,12 @@ public class GuardianTeam {
         return false;
     }
 
-    public GuardianPlayer getPlayer(UUID uuid) {
-        return players.get(uuid);
+    public GuardianPlayer getPlayer(Player player) {
+        return players.get(player.getUniqueId());
     }
 
     public boolean isPlayerInTeam(Player player) {
         return players.containsKey(player.getUniqueId());
-    }
-
-    public boolean isPlayerInTeam(UUID uuid) {
-        return players.containsKey(uuid);
     }
 
     public int getPlayerCount() {
@@ -111,10 +99,6 @@ public class GuardianTeam {
 
     public ArrayList<GuardianPlayer> getPlayers() {
         return new ArrayList<GuardianPlayer>(players.values());
-    }
-
-    public void setRespawnBlocks(List<Location> locations) {
-        this.respawnBlocks = locations;
     }
 
     public void broadcastMessage(String msg) {

@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayerShopInventoryClickHandler implements Listener {
-
-    Guardian plugin;
+    private final Guardian plugin;
 
     public PlayerShopInventoryClickHandler(Guardian plugin) {
         this.plugin = plugin;

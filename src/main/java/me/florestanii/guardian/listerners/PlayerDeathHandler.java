@@ -1,6 +1,7 @@
 package me.florestanii.guardian.listerners;
 
 import me.florestanii.guardian.Guardian;
+import me.florestanii.guardian.arena.GuardianArena;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +19,9 @@ public class PlayerDeathHandler implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         final Player p = e.getEntity();
-        if (plugin.getArena().isPlayerInArena(p)) {
+        GuardianArena arena = plugin.getArena(p);
+
+        if (arena != null) {
             e.getDrops().clear();
             e.setNewLevel(0);
             e.setNewExp(0);
@@ -26,9 +29,9 @@ public class PlayerDeathHandler implements Listener {
             e.setDroppedExp(0);
 
             if (p.getKiller() == null) {
-                plugin.getArena().broadcastMessage(plugin.getArena().getTeamOfPlayer(p.getUniqueId()).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " ist gestorben.");
+                arena.broadcastMessage(arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " ist gestorben.");
             } else {
-                plugin.getArena().broadcastMessage(plugin.getArena().getTeamOfPlayer(p.getUniqueId()).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " wurde von " + plugin.getArena().getTeamOfPlayer(p.getKiller().getUniqueId()).getChatColor() + p.getKiller().getDisplayName() + ChatColor.GRAY + "getötet.");
+                arena.broadcastMessage(arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " wurde von " + arena.getTeamOfPlayer(p.getKiller()).getChatColor() + p.getKiller().getDisplayName() + ChatColor.GRAY + "getötet.");
             }
 
             //TODO auto-respawn the player

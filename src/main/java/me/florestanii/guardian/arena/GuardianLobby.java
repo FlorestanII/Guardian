@@ -1,7 +1,7 @@
 package me.florestanii.guardian.arena;
 
-import me.florestanii.guardian.util.Util;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
+import me.florestanii.guardian.util.Util;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -10,11 +10,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class GuardianLobby {
-
-    GuardianArena arena;
-
-    Location spawn;
-
+    private GuardianArena arena;
     HashMap<UUID, GuardianPlayer> players = new HashMap<UUID, GuardianPlayer>();
 
     int maxPlayers = 8;
@@ -25,21 +21,16 @@ public class GuardianLobby {
     int countdown = startCountdown;
 
     boolean controlPlayerCount = true;
+    private Location location;
 
     public GuardianLobby(GuardianArena arena, Location spawn, int maxPlayers, int minPlayers) {
         this.arena = arena;
-        this.spawn = spawn;
+        this.location = spawn;
         this.maxPlayers = maxPlayers;
-    }
-
-    public GuardianLobby(GuardianArena arena, int maxPlayers, int minPlayers) {
-        this.arena = arena;
-        this.maxPlayers = maxPlayers;
-        this.minPlayers = minPlayers;
     }
 
     public void startCountdown() {
-        countdownScheduler = arena.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(arena.plugin, new Runnable() {
+        countdownScheduler = arena.getPlugin().getServer().getScheduler().scheduleSyncRepeatingTask(arena.getPlugin(), new Runnable() {
 
             @Override
             public void run() {
@@ -71,7 +62,7 @@ public class GuardianLobby {
         if (countdownScheduler == -1) {
             return false;
         } else {
-            arena.plugin.getServer().getScheduler().cancelTask(countdownScheduler);
+            arena.getPlugin().getServer().getScheduler().cancelTask(countdownScheduler);
             resetCountdown();
             if (!isArenaStarted) broadcastMessage(ChatColor.RED + "Der Countdown wurde abgebrochen!");
             countdownScheduler = -1;
@@ -92,11 +83,11 @@ public class GuardianLobby {
 
         if (players.size() < maxPlayers) {
             players.put(player.getUniqueId(), player);
-            arena.getPlugin().getServer().getPlayer(player.getUniqueId()).teleport(spawn);
+            arena.getPlugin().getServer().getPlayer(player.getUniqueId()).teleport(arena.getLobbySpawn());
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setGameMode(GameMode.SURVIVAL);
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).getInventory().clear();
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setPlayerListName(ChatColor.GREEN + player.getDisplayName());
-            Util.setTagColor(arena.plugin, arena.getPlugin().getServer().getPlayer(player.getUniqueId()), ChatColor.GREEN);
+            Util.setTagColor(arena.getPlugin(), arena.getPlugin().getServer().getPlayer(player.getUniqueId()), ChatColor.GREEN);
             if (getPlayerCount() >= minPlayers && controlPlayerCount && !isCountdownStarted()) {
                 startCountdown();
             }
@@ -179,14 +170,6 @@ public class GuardianLobby {
         return players;
     }
 
-    public void setSpawn(Location spawn) {
-        this.spawn = spawn;
-    }
-
-    public Location getSpawn() {
-        return spawn;
-    }
-
     public void broadcastMessage(String msg) {
         ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(
                 this.players.values());
@@ -218,15 +201,15 @@ public class GuardianLobby {
         }
     }
 
-    public boolean isReady() {
-        return arena != null && spawn != null;
-    }
-
     public void setCountdown(int newCountdown) {
         this.countdown = newCountdown;
     }
 
     public int getCountdown() {
         return countdown;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }
