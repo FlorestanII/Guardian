@@ -19,7 +19,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class ArenaSetupCommands extends SubCommandHandler {
-    private final Guardian plugin; //TODO WIP
+    private final Guardian plugin;
     private GuardianArenaConfig arena;
 
     public ArenaSetupCommands(Guardian plugin) {
