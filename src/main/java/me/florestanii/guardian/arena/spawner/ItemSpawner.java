@@ -19,7 +19,7 @@ public class ItemSpawner {
         location = config.getLocation();
         id = config.getId();
         data = (byte) config.getData();
-        delay = 20 * 8; //TODO make configurable
+        delay = config.getDelay() * 20;
     }
 
     public void startSpawner() {
