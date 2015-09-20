@@ -1,12 +1,14 @@
 package me.florestanii.guardian;
 
+import de.craften.plugins.mcguilib.text.TextBuilder;
 import me.florestanii.guardian.arena.GuardianArena;
-import me.florestanii.guardian.arena.GuardianArenaState;
 import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import me.florestanii.guardian.arena.specialitems.teleportpowder.TeleportPowderHandler;
+import me.florestanii.guardian.commands.ArenaCommands;
+import me.florestanii.guardian.commands.GuardianCommandHandler;
 import me.florestanii.guardian.listerners.*;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
+import me.florestanii.guardian.util.commands.CommandHandler;
+import me.florestanii.guardian.util.commands.SubCommandHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -16,7 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Guardian extends JavaPlugin {
+public class Guardian extends JavaPlugin implements CommandHandler {
     private Map<String, GuardianArena> arenas;
 
     @Override
@@ -42,58 +44,18 @@ public class Guardian extends JavaPlugin {
         new EntityDeathHandler(this);
         new PlayerShopInventoryClickHandler(this);
         new TeleportPowderHandler(this);
+
+        SubCommandHandler commandHandler = new GuardianCommandHandler();
+        commandHandler.addHandlers(this, new ArenaCommands(this));
+        getCommand("guardian").setExecutor(commandHandler);
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This plugin has no commands for the console!");
-            return true;
-        }
-        Player p = (Player) sender;
-
-        if (cmd.getName().equalsIgnoreCase("guardian") && args.length >= 1) {
-            if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
-                GuardianArena arena = getArena(args[1]);
-                if (arena != null) {
-                    if (arena.getArenaState() == GuardianArenaState.LOBBY) {
-                        arena.joinPlayer(p);
-                    } else {
-                        p.sendMessage(ChatColor.DARK_RED + "Die Guardian-Runde läuft bereits, du musst warten, bis sie vorbei ist.");
-                    }
-                }
-            } else if (args[0].equalsIgnoreCase("leave")) {
-                GuardianArena arena = getArena((Player) sender);
-                if (arena.isPlayerInArena(p)) {
-                    arena.kickPlayer(p, p.getDisplayName() + " hat das Spiel verlassen.");
-                } else {
-                    p.sendMessage(ChatColor.DARK_RED + "Du befindest dich in keiner Guardian-Runde!");
-                }
-            } else if (args[0].equalsIgnoreCase("help")) {
-                //TODO Spieler hilfe senden.
-            } else if (args[0].equalsIgnoreCase("reload")) {
-                reloadConfig();
-            } else {
-                p.sendMessage("Unknown command. Type /guardian help for a full list of the commands.");
-            }
-        } else if (cmd.getName().equalsIgnoreCase("start") && args.length == 1) {
-            if (p.hasPermission("guardian.start")) {
-                GuardianArena arena = getArena(args[0]);
-                if (arena != null) {
-                    if (arena.getArenaState() == GuardianArenaState.LOBBY) {
-                        arena.getLobby().setCountdown(3);
-                    } else {
-                        p.sendMessage(ChatColor.DARK_RED + "Das Spiel befindet sich nicht in der Lobby Phase!");
-                    }
-                } else {
-                    p.sendMessage(ChatColor.DARK_RED + "Die angegebene Arena existiert nicht.");
-                }
-            } else {
-                p.sendMessage(ChatColor.DARK_RED + "Du hast für diesen Befehl keine Rechte!");
-            }
-        }
-
-        return true;
+    @me.florestanii.guardian.util.commands.Command(
+            value = "reload",
+            permission = "guardian.admin")
+    public void reload(CommandSender sender) {
+        reloadConfig();
+        prefix().append("Configuration reloaded.").sendTo(sender);
     }
 
     public GuardianArena getArena(String name) {
@@ -114,6 +76,15 @@ public class Guardian extends JavaPlugin {
     }
 
     public boolean isPlayerInArena(Player player) {
-        return getArena(player) != null;
+        for (GuardianArena arena : getArenas()) {
+            if (arena.isPlayerInArena(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static TextBuilder prefix() {
+        return TextBuilder.create("[Guardian] ").gold();
     }
 }

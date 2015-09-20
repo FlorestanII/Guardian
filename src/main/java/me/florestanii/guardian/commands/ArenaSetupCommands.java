@@ -4,10 +4,10 @@ import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import org.bukkit.entity.Player;
 
-public class ArenaSetup { //TODO WIP
+public class ArenaSetupCommands { //TODO WIP
     private final GuardianArenaConfig arena;
 
-    public ArenaSetup(Guardian plugin) {
+    public ArenaSetupCommands(Guardian plugin) {
         this.arena = new GuardianArenaConfig();
     }
 

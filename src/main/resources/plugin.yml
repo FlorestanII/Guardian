@@ -5,6 +5,3 @@ main: me.florestanii.guardian.Guardian
 commands:
   guardian:
     usage: /<command> <args>
-  start:
-    usage: /<command>
-    

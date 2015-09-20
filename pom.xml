@@ -20,6 +20,11 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <!-- for mcguilib and other libraries by Craften -->
+            <id>wertarbyte-repo</id>
+            <url>http://repo.wertarbyte.com/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -28,6 +33,12 @@
             <artifactId>bukkit</artifactId>
             <version>1.8.7-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.craften.plugins.mcguilib</groupId>
+            <artifactId>mcguilib-bukkit</artifactId>
+            <version>1.0.6</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
