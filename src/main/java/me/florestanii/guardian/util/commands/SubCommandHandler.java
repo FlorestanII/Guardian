@@ -29,6 +29,10 @@ public abstract class SubCommandHandler implements org.bukkit.command.CommandExe
         handlers = new ArrayList<>();
     }
 
+    public String getParentCommand() {
+        return parentCommand;
+    }
+
     @Override
     public final boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         String subCommand = args.length > 0 ? args[0] : "";

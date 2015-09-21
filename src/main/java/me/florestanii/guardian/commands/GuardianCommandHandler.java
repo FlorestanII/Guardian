@@ -8,18 +8,8 @@ import org.bukkit.command.CommandSender;
 /**
  * Command handler for /guardian commands.
  */
-public class GuardianCommandHandler extends SubCommandHandler {
+public class GuardianCommandHandler extends GuardianSubCommandHandler {
     public GuardianCommandHandler() {
         super("guardian");
-    }
-
-    @Override
-    protected void onInvalidCommand(CommandSender sender) {
-        Guardian.prefix().append("Unknown command. Type /guardian help for a full list of the commands.").sendTo(sender);
-    }
-
-    @Override
-    protected void onPermissionDenied(CommandSender sender, Command command, String[] args) {
-        Guardian.prefix().append("Du hast für diesen Befehl keine Rechte!").darkRed().sendTo(sender);
     }
 }

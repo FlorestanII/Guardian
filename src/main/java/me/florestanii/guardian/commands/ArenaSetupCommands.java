@@ -19,7 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class ArenaSetupCommands extends SubCommandHandler implements CommandHandler {
+public class ArenaSetupCommands extends GuardianSubCommandHandler implements CommandHandler {
     private final Guardian plugin;
     private GuardianArenaConfig arena;
 
@@ -215,15 +215,5 @@ public class ArenaSetupCommands extends SubCommandHandler implements CommandHand
         }, plugin);
 
         TextBuilder.create("Now click on the respawn block.").sendTo(player);
-    }
-
-    @Override
-    protected void onInvalidCommand(CommandSender sender) {
-        TextBuilder.create("Unknown command. Use /guardiansetup help to see als commands.").sendTo(sender);
-    }
-
-    @Override
-    protected void onPermissionDenied(CommandSender sender, Command command, String[] args) {
-        TextBuilder.create("You have no permission to use this command.").sendTo(sender);
     }
 }
