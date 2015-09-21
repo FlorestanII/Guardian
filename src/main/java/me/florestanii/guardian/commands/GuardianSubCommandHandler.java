@@ -13,12 +13,16 @@ public abstract class GuardianSubCommandHandler extends SubCommandHandler {
 
     @Override
     protected final void onInvalidCommand(CommandSender sender) {
-        Guardian.prefix().append("Unknown command. Type /guardian help for a full list of the commands.").sendTo(sender);
+        Guardian.prefix()
+                .append("Unknown command. Type ").red()
+                .append("/guardian help").gold()
+                .append(" for a full list of the commands.").red()
+                .sendTo(sender);
     }
 
     @Override
     protected final void onPermissionDenied(CommandSender sender, Command command, String[] args) {
-        Guardian.prefix().append("Du hast für diesen Befehl keine Rechte!").darkRed().sendTo(sender);
+        Guardian.prefix().append("You have no permission to use this command.").red().sendTo(sender);
     }
 
     @Override
