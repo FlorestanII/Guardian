@@ -1,5 +1,6 @@
 package me.florestanii.guardian.arena;
 
+import de.craften.plugins.mcguilib.text.TextBuilder;
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import me.florestanii.guardian.arena.config.GuardianTeamConfig;
@@ -143,20 +144,20 @@ public class GuardianArena {
                 public void run() {
 
                     if (endCountdown != 0) {
-
                         if (endCountdown <= 5) {
-                            broadcastMessage(ChatColor.RED + "Die Arena wird in " + ChatColor.YELLOW + endCountdown + ChatColor.RED + " Sekunden neu gestartet!");
+                            broadcastMessage(TextBuilder.create("Die Arena wird in ").red()
+                                    .append(String.valueOf(endCountdown)).yellow()
+                                    .append(" Sekunden neu gestartet.").red()
+                                    .getSingleLine());
                             System.out.println(endCountdown);
                         }
 
                         endCountdown--;
-
                     } else {
                         cancelEndCountdown();
-                        System.out.println("Arena stoped!");
+                        System.out.println("Arena stopped!");
                         resetArena();
                     }
-
                 }
             }, 0, 20);
         }

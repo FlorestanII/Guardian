@@ -119,9 +119,9 @@ public class ArenaSetupCommands extends GuardianSubCommandHandler implements Com
         itemSpawnerConfig.setDelay(Integer.parseInt(args[1]));
 
         if (args[0].equalsIgnoreCase("diamond")) {
-            itemSpawnerConfig.setId(Material.DIAMOND.getId());
+            itemSpawnerConfig.setType(Material.DIAMOND);
         } else if (args[0].equalsIgnoreCase("emerald")) {
-            itemSpawnerConfig.setId(Material.EMERALD.getId());
+            itemSpawnerConfig.setType(Material.EMERALD);
         }
 
         arena.addItemSpawner(itemSpawnerConfig);

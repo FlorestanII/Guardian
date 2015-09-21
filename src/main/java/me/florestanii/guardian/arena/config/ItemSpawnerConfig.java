@@ -1,6 +1,7 @@
 package me.florestanii.guardian.arena.config;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 
@@ -34,6 +35,11 @@ public class ItemSpawnerConfig {
 
     public void setId(int id) {
         this.id = id;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public void setType(Material material) {
+        id = material.getId();
     }
 
     public int getData() {
