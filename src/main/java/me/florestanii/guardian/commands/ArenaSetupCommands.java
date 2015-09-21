@@ -142,9 +142,9 @@ public class ArenaSetupCommands extends GuardianSubCommandHandler implements Com
         arena.addTeam(args[0], teamConfig);
 
         TextBuilder.create("Team ")
-                .append(teamConfig.getColor() + teamConfig.getName())
+                .append(teamConfig.getName()).color(teamConfig.getColor())
                 .append(" created. Use its short name ")
-                .append(teamConfig.getColor() + args[0])
+                .append(args[0]).color(teamConfig.getColor())
                 .append(" to configure it.")
                 .sendTo(player);
     }
@@ -160,7 +160,7 @@ public class ArenaSetupCommands extends GuardianSubCommandHandler implements Com
         arena.removeTeam(args[0]);
 
         TextBuilder.create("Team ")
-                .append(team.getColor() + team.getName())
+                .append(team.getName()).color(team.getColor())
                 .append(" removed.")
                 .sendTo(player);
     }
@@ -176,7 +176,7 @@ public class ArenaSetupCommands extends GuardianSubCommandHandler implements Com
         team.setSpawn(player.getLocation().clone());
 
         TextBuilder.create("Spawn of team ")
-                .append(team.getColor() + team.getName())
+                .append(team.getName()).color(team.getColor())
                 .append(" set to your location.").sendTo(player);
     }
 
@@ -199,13 +199,13 @@ public class ArenaSetupCommands extends GuardianSubCommandHandler implements Com
                     if (team.isRespawnBlock(location)) {
                         team.removeRespawnBlock(location);
                         TextBuilder.create("Respawn block for team ")
-                                .append(team.getColor() + team.getName())
+                                .append(team.getName()).color(team.getColor())
                                 .append(" removed.")
                                 .sendTo(player);
                     } else {
                         team.addRespawnBlock(location);
                         TextBuilder.create("Respawn block for team ")
-                                .append(team.getColor() + team.getName())
+                                .append(team.getName()).color(team.getColor())
                                 .append(" added.")
                                 .sendTo(player);
                     }
