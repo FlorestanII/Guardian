@@ -289,6 +289,6 @@ public class PlayerShopHandler implements Listener {
     }
 
     private ItemStack netherStars(int amount) {
-        return new ItemStack(Material.NETHER_STAR, amount, (short) 192);
+        return new ItemStack(Material.NETHER_STAR, amount);
     }
 }
