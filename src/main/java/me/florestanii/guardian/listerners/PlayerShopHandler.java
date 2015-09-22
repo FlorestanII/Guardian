@@ -67,13 +67,13 @@ public class PlayerShopHandler implements Listener {
         MerchantOffer potion_healing = new MerchantOffer(
                 emeralds(32),
                 ItemStackBuilder.createPotion(16453)
-                        .setPotionEffect(new PotionEffect(PotionEffectType.SPEED, 0, 0))
+                        .setPotionEffect(new PotionEffect(PotionEffectType.HEAL, 0, 0))
                         .build());
 
         MerchantOffer potion_healing2 = new MerchantOffer(
                 diamonds(2),
                 ItemStackBuilder.createPotion(16453)
-                        .setPotionEffect(new PotionEffect(PotionEffectType.SPEED, 0, 1))
+                        .setPotionEffect(new PotionEffect(PotionEffectType.HEAL, 0, 1))
                         .build());
 
         potionMerchant.addOffers(potion_strength, potion_speed, potion_healing, potion_healing2);
