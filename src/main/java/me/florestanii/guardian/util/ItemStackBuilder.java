@@ -26,7 +26,7 @@ public class ItemStackBuilder {
     private PotionEffect potionEffect;
 
     public ItemStackBuilder addEnchantment(Enchantment enchantment, int level) {
-    	 if (enchantment == null) {
+    	if (enchantments == null) {
              enchantments = new HashMap<>();
          }
     	enchantments.put(enchantment, level);
@@ -34,7 +34,7 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder addEnchantment(Enchantment enchantment) {
-        if (enchantment == null) {
+        if (enchantments == null) {
             enchantments = new HashMap<>();
         }
         return addEnchantment(enchantment, 1);
