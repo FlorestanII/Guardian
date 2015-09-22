@@ -32,7 +32,7 @@ public class PlayerDeathHandler implements Listener {
             if (p.getKiller() == null) {
                 arena.broadcastMessage(arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " ist gestorben.");
             } else {
-                arena.broadcastMessage(arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " wurde von " + arena.getTeamOfPlayer(p.getKiller()).getChatColor() + p.getKiller().getDisplayName() + ChatColor.GRAY + "getötet.");
+                arena.broadcastMessage(arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + " wurde von " + arena.getTeamOfPlayer(p.getKiller()).getChatColor() + p.getKiller().getDisplayName() + ChatColor.GRAY + " getötet.");
             }
 
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
