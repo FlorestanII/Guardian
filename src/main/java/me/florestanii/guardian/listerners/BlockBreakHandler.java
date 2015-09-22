@@ -38,8 +38,8 @@ public class BlockBreakHandler implements Listener {
                     } else {
                         for (GuardianTeam team : arena.getRivalTeamsOfPlayer(player.getBukkitPlayer())) {
                             if (team.isOwnRespawnblock(e.getBlock().getLocation())) {
-                                arena.broadcastMessage(ChatColor.BLUE + "Ein Respawnblock von Team " + team.getChatColor() + team.getName() +
-                                        " wurde von " + ChatColor.RED + e.getPlayer().getDisplayName() + ChatColor.BLUE + " zerstört!");
+                                arena.broadcastMessage(ChatColor.DARK_RED + "Ein Respawnblock von Team " + team.getChatColor() + team.getName() + ChatColor.DARK_RED + 
+                                        " wurde von " + arena.getTeamOfPlayer(e.getPlayer()).getChatColor() + e.getPlayer().getDisplayName() + ChatColor.DARK_RED + " zerstört!");
                                 arena.broadcastSound(Sound.WITHER_DEATH);
                                 e.getBlock().setType(Material.AIR);
                                 e.setCancelled(true);
