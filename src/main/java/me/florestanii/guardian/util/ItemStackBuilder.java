@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,17 +20,17 @@ public class ItemStackBuilder {
     private int type;
     private int amount = 1;
     private int damage = 0;
-    private int data = 0;
+    private Integer data;
     private String displayName;
     private List<String> lore;
     private Map<Enchantment, Integer> enchantments;
     private PotionEffect potionEffect;
 
     public ItemStackBuilder addEnchantment(Enchantment enchantment, int level) {
-    	if (enchantments == null) {
-             enchantments = new HashMap<>();
-         }
-    	enchantments.put(enchantment, level);
+        if (enchantments == null) {
+            enchantments = new HashMap<>();
+        }
+        enchantments.put(enchantment, level);
         return this;
     }
 
@@ -86,7 +87,12 @@ public class ItemStackBuilder {
     }
 
     public ItemStack build() {
-        ItemStack itemStack = new ItemStack(type, amount, (short) damage, (byte) data);
+        ItemStack itemStack;
+        if (data != null) {
+            itemStack = new ItemStack(type, amount, (short) damage, data.byteValue());
+        } else {
+            itemStack = new ItemStack(type, amount, (short) damage);
+        }
 
         ItemMeta meta = itemStack.getItemMeta();
         if (displayName != null) {
