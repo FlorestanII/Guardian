@@ -28,6 +28,7 @@ public class GuardianTeam {
         this.name = guardianTeamConfig.getName();
         this.respawnBlocks = guardianTeamConfig.getRespawnBlocks();
         this.spawn = guardianTeamConfig.getSpawn();
+        this.chatColor = guardianTeamConfig.getColor();
     }
 
     public ChatColor getChatColor() {
