@@ -47,8 +47,7 @@ public class GuardianTeam {
     }
 
     public void removePlayer(Player player) {
-        players.remove(player.getUniqueId());
-        arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setPlayerListName(player.getDisplayName());
+    	removePlayer(player.getUniqueId());
     }
 
     public void removePlayer(final UUID uuid) {
