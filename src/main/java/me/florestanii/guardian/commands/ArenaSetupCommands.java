@@ -185,7 +185,6 @@ public class ArenaSetupCommands extends GuardianSubCommandHandler implements Com
             min = 1, max = 1)
     public void addOrRemoveRespawnBlock(final Player player, String[] args) {
         final GuardianTeamConfig team = arena.getTeams().get(args[0]);
-        team.setSpawn(player.getLocation().clone());
 
         plugin.getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.HIGHEST)
