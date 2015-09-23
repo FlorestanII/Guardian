@@ -11,8 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public class PlayerShopHandler implements Listener {
     @EventHandler
@@ -54,26 +54,26 @@ public class PlayerShopHandler implements Listener {
 
         MerchantOffer potion_strength = new MerchantOffer(
                 netherStars(2),
-                ItemStackBuilder.createPotion(8201)
-                        .setPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 120, 0))
+                ItemStackBuilder.createPotion(PotionType.INSTANT_DAMAGE)
+                        .addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(20 * 120, 0))
                         .build());
 
         MerchantOffer potion_speed = new MerchantOffer(
                 emeralds(32),
-                ItemStackBuilder.createPotion(8194)
-                        .setPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 120, 0))
+                ItemStackBuilder.createPotion(PotionType.SPEED)
+                        .addPotionEffect(PotionEffectType.SPEED.createEffect(20 * 120, 0))
                         .build());
 
         MerchantOffer potion_healing = new MerchantOffer(
                 emeralds(32),
-                ItemStackBuilder.createPotion(8261)
-                        .setPotionEffect(new PotionEffect(PotionEffectType.HEAL, 0, 0))
+                ItemStackBuilder.createPotion(PotionType.INSTANT_HEAL)
+                        .addPotionEffect(PotionEffectType.HEAL.createEffect(0, 0))
                         .build());
 
         MerchantOffer potion_healing2 = new MerchantOffer(
                 diamonds(2),
-                ItemStackBuilder.createPotion(8261)
-                        .setPotionEffect(new PotionEffect(PotionEffectType.HEAL, 0, 1))
+                ItemStackBuilder.createPotion(PotionType.INSTANT_HEAL)
+                        .addPotionEffect(PotionEffectType.HEAL.createEffect(0, 1))
                         .build());
 
         potionMerchant.addOffers(potion_strength, potion_speed, potion_healing, potion_healing2);

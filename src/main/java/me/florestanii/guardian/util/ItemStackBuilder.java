@@ -6,12 +6,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A convenient builder for {@link org.bukkit.inventory.ItemStack}s.
@@ -24,7 +21,7 @@ public class ItemStackBuilder {
     private String displayName;
     private List<String> lore;
     private Map<Enchantment, Integer> enchantments;
-    private PotionEffect potionEffect;
+    private ArrayList<PotionEffect> potionEffects;
 
     public ItemStackBuilder addEnchantment(Enchantment enchantment, int level) {
         if (enchantments == null) {
@@ -81,8 +78,11 @@ public class ItemStackBuilder {
         return this;
     }
 
-    public ItemStackBuilder setPotionEffect(PotionEffect potionEffect) {
-        this.potionEffect = potionEffect;
+    public ItemStackBuilder addPotionEffect(PotionEffect potionEffect) {
+        if (potionEffects == null) {
+            potionEffects = new ArrayList<>();
+        }
+        potionEffects.add(potionEffect);
         return this;
     }
 
@@ -101,8 +101,10 @@ public class ItemStackBuilder {
         if (lore != null) {
             meta.setLore(lore);
         }
-        if (meta instanceof PotionMeta && potionEffect != null) {
-            ((PotionMeta) meta).addCustomEffect(potionEffect, false);
+        if (meta instanceof PotionMeta && potionEffects != null) {
+            for (PotionEffect potionEffect : potionEffects) {
+                ((PotionMeta) meta).addCustomEffect(potionEffect, false);
+            }
         }
         itemStack.setItemMeta(meta);
 
@@ -121,7 +123,13 @@ public class ItemStackBuilder {
         return builder().setType(material);
     }
 
-    public static ItemStackBuilder createPotion(int metadata) {
-        return builder().setType(Material.POTION).setDamage(metadata);
+    /**
+     * Create a potion with the given type. Note that the type only controls the bottle color.
+     *
+     * @param type type (only controls the bottle color)
+     * @return builder for the potion
+     */
+    public static ItemStackBuilder createPotion(PotionType type) {
+        return builder().setType(Material.POTION).setDamage(type.getDamageValue());
     }
 }
