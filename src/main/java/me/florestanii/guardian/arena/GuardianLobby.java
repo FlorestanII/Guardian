@@ -21,7 +21,7 @@ public class GuardianLobby {
     int countdown = startCountdown;
 
     boolean controlPlayerCount = true;
-    private Location location;
+    private final Location location;
 
     public GuardianLobby(GuardianArena arena, Location spawn, int maxPlayers, int minPlayers) {
         this.arena = arena;
@@ -83,7 +83,7 @@ public class GuardianLobby {
     public void joinPlayer(GuardianPlayer player) {
         if (players.size() < maxPlayers) {
             players.put(player.getUniqueId(), player);
-            arena.getPlugin().getServer().getPlayer(player.getUniqueId()).teleport(arena.getLobbySpawn());
+            arena.getPlugin().getServer().getPlayer(player.getUniqueId()).teleport(location);
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setGameMode(GameMode.SURVIVAL);
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).getInventory().clear();
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setPlayerListName(ChatColor.GREEN + player.getDisplayName());
@@ -147,30 +147,21 @@ public class GuardianLobby {
         return new ArrayList<GuardianPlayer>(this.players.values());
     }
 
-    public HashMap<UUID, GuardianPlayer> getPlayerHashMap() {
-        return players;
-    }
-
     public void broadcastMessage(String msg) {
-        ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(
-                this.players.values());
-        for (GuardianPlayer p : players) {
-            arena.getPlugin().getServer().getPlayer(p.getUniqueId()).sendMessage(msg);
+        for (GuardianPlayer p : players.values()) {
+            p.getBukkitPlayer().sendMessage(msg);
         }
     }
 
     public void setLevelOfAllPlayers(int level) {
-        ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(
-                this.players.values());
-        for (GuardianPlayer p : players) {
-            arena.getPlugin().getServer().getPlayer(p.getUniqueId()).setLevel(level);
+        for (GuardianPlayer p : players.values()) {
+            p.getBukkitPlayer().setLevel(level);
         }
     }
 
     public void broadcastSound(Sound sound) {
-        ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(this.players.values());
-        for (GuardianPlayer p : players) {
-            arena.getPlugin().getServer().getPlayer(p.getUniqueId()).playSound(arena.getPlugin().getServer().getPlayer(p.getUniqueId()).getLocation(), sound, 3, 2);
+        for (GuardianPlayer p : players.values()) {
+            p.getBukkitPlayer().playSound(p.getBukkitPlayer().getLocation(), sound, 3, 2);
         }
     }
 
@@ -178,7 +169,7 @@ public class GuardianLobby {
         ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(
                 this.players.values());
         for (GuardianPlayer p : players) {
-            arena.getPlugin().getServer().getPlayer(p.getUniqueId()).playNote(arena.getPlugin().getServer().getPlayer(p.getUniqueId()).getLocation(), instrument, note);
+            p.getBukkitPlayer().playNote(p.getBukkitPlayer().getLocation(), instrument, note);
         }
     }
 

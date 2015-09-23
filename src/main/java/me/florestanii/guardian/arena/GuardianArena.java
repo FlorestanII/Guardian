@@ -219,10 +219,6 @@ public class GuardianArena {
         guardianSpawner.startSpawner();
     }
 
-    public Location getLobbySpawn() {
-        return lobby.getLocation();
-    }
-
     public GuardianLobby getLobby() {
         return lobby;
     }

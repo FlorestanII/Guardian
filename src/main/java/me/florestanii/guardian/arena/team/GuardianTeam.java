@@ -46,18 +46,14 @@ public class GuardianTeam {
         Util.setTagColor(arena.getPlugin(), arena.getPlugin().getServer().getPlayer(player.getUniqueId()), chatColor);
     }
 
-    public void removePlayer(Player player) {
-    	removePlayer(player.getUniqueId());
-    }
-
-    public void removePlayer(final UUID uuid) {
-        players.remove(uuid);
+    public void removePlayer(final Player player) {
+        players.remove(player.getUniqueId());
         arena.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(arena.getPlugin(), new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    arena.getPlugin().getServer().getPlayer(uuid).setPlayerListName(arena.getPlugin().getServer().getPlayer(uuid).getDisplayName());
+                    player.setPlayerListName(player.getDisplayName());
                 } catch (Exception e) {
                 }
             }
