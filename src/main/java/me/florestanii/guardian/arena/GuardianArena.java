@@ -68,7 +68,7 @@ public class GuardianArena {
             player.sendMessage("Du kannst in diese Arena nicht rein, da sie schon läuft oder offline ist");
         } else {
             playerCount++;
-            lobby.joinPlayer(new GuardianPlayer(player.getUniqueId(), player.getDisplayName()));
+            lobby.joinPlayer(new GuardianPlayer(player.getUniqueId(), player.getName()));
             player.getInventory().clear();
             player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
             player.getInventory().setHeldItemSlot(0);
@@ -105,7 +105,7 @@ public class GuardianArena {
             p.getInventory().clear();
             p.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
             p.teleport(leavePos);
-            p.setPlayerListName(p.getDisplayName());
+            p.setPlayerListName(p.getName());
             Util.setTagColor(plugin, p, ChatColor.WHITE);
             Util.healPlayer(p);
 

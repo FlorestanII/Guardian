@@ -53,7 +53,7 @@ public class GuardianTeam {
             @Override
             public void run() {
                 try {
-                    player.setPlayerListName(player.getDisplayName());
+                    player.setPlayerListName(player.getName());
                 } catch (Exception e) {
                 }
             }
