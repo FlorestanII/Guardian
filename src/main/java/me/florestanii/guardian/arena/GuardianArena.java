@@ -264,6 +264,7 @@ public class GuardianArena {
 
     public void kickPlayer(Player p, String reason) {
         leavePlayer(p);
+        p.closeInventory(); //the player might grab items out of the shop if we don't close the inventory
         if (reason != null) {
             broadcastMessage(reason);
         }

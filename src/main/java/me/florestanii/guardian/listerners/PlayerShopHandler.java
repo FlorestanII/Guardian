@@ -1,6 +1,7 @@
 package me.florestanii.guardian.listerners;
 
 import de.craften.plugins.mcguilib.text.TextBuilder;
+import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.util.ItemStackBuilder;
 import me.florestanii.guardian.util.merchant.Merchant;
 import me.florestanii.guardian.util.merchant.MerchantOffer;
@@ -15,35 +16,43 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 public class PlayerShopHandler implements Listener {
+    private final Guardian plugin;
+
+    public PlayerShopHandler(Guardian plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getWhoClicked() instanceof Player && e.getInventory().getName().equals("Shop")) {
             Player player = (Player) e.getWhoClicked();
-            e.setCancelled(true);
-            player.closeInventory();
+            if (plugin.isPlayerInArena(player)) {
+                e.setCancelled(true);
+                player.closeInventory();
 
-            switch (e.getCurrentItem().getType()) {
-                case IRON_PICKAXE:
-                    showPickaxeMerchant(player);
-                    break;
-                case CHAINMAIL_CHESTPLATE:
-                    showArmorMerchant(player);
-                    break;
-                case BOW:
-                    showBowMerchant(player);
-                    break;
-                case APPLE:
-                    showFootMerchant(player);
-                    break;
-                case ENDER_PEARL:
-                    showSpecialMerchant(player);
-                    break;
-                case POTION:
-                    showPotionMerchant(player);
-                    break;
-                case IRON_SWORD:
-                    showWeaponsMerchant(player);
-                    break;
+                switch (e.getCurrentItem().getType()) {
+                    case IRON_PICKAXE:
+                        showPickaxeMerchant(player);
+                        break;
+                    case CHAINMAIL_CHESTPLATE:
+                        showArmorMerchant(player);
+                        break;
+                    case BOW:
+                        showBowMerchant(player);
+                        break;
+                    case APPLE:
+                        showFootMerchant(player);
+                        break;
+                    case ENDER_PEARL:
+                        showSpecialMerchant(player);
+                        break;
+                    case POTION:
+                        showPotionMerchant(player);
+                        break;
+                    case IRON_SWORD:
+                        showWeaponsMerchant(player);
+                        break;
+                }
             }
         }
     }
