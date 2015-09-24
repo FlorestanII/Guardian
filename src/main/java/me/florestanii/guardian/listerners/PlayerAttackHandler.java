@@ -22,11 +22,7 @@ public class PlayerAttackHandler implements Listener {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             GuardianArena arena = plugin.getArena(p);
-            if (arena != null) {
-                if (arena.getLobby().isPlayerInLobby(p)) {
-                    e.setCancelled(true);
-                }
-            } else {
+            if (arena != null && arena.getLobby().isPlayerInLobby(p)) {
                 e.setCancelled(true);
             }
         }
@@ -51,24 +47,14 @@ public class PlayerAttackHandler implements Listener {
                         e.setCancelled(true); //disable hitting players of the own team
                     }
                 }
-            } else {
-                e.setCancelled(true);
             }
-
         } else if (e.getEntity() instanceof Villager) {
             if (e.getDamager() instanceof Player) {
                 Player damager = (Player) e.getDamager();
 
                 if (plugin.isPlayerInArena(damager)) {
                     e.setCancelled(true);
-                } else if (damager.hasPermission("guardian.admin")) {
-                    e.setCancelled(false);
-                } else {
-                    e.setCancelled(true);
                 }
-
-            } else {
-                e.setCancelled(true);
             }
         }
     }

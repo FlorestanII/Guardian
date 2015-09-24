@@ -10,13 +10,13 @@ import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
-public class BlockBreakHandler implements Listener {
+public class ArenaProtectionListener implements Listener {
     private final Guardian plugin;
 
-    public BlockBreakHandler(Guardian plugin) {
+    public ArenaProtectionListener(Guardian plugin) {
         this.plugin = plugin;
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
@@ -38,8 +38,13 @@ public class BlockBreakHandler implements Listener {
                     } else {
                         for (GuardianTeam team : arena.getRivalTeamsOfPlayer(player.getBukkitPlayer())) {
                             if (team.isOwnRespawnblock(e.getBlock().getLocation())) {
-                                arena.broadcastMessage(ChatColor.DARK_RED + "Ein Respawnblock von Team " + team.getChatColor() + team.getName() + ChatColor.DARK_RED + 
-                                        " wurde von " + arena.getTeamOfPlayer(e.getPlayer()).getChatColor() + e.getPlayer().getDisplayName() + ChatColor.DARK_RED + " zerstört!");
+                                arena.broadcastMessage(Guardian.prefix()
+                                        .append("Ein Respawnblock von ").darkRed()
+                                        .append("Team " + team.getName()).color(team.getChatColor())
+                                        .append(" wurde von ").darkRed()
+                                        .append(e.getPlayer().getName()).color(arena.getTeamOfPlayer(e.getPlayer()).getChatColor())
+                                        .append(" zerstört.").darkRed()
+                                        .getSingleLine());
                                 arena.broadcastSound(Sound.WITHER_DEATH);
                                 e.getBlock().setType(Material.AIR);
                                 e.setCancelled(true);
@@ -52,12 +57,13 @@ public class BlockBreakHandler implements Listener {
                     }
                 }
             }
-        } else {
-            if (e.getPlayer().hasPermission("guardian.admin.build")) { //TODO only block building if the block is inside of an arena
-                e.setCancelled(false);
-            } else {
-                e.setCancelled(true);
-            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        if (plugin.isPlayerInArena(e.getPlayer())) {
+            e.setCancelled(true);
         }
     }
 }

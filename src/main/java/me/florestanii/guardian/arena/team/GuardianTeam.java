@@ -100,14 +100,14 @@ public class GuardianTeam {
     public void broadcastMessage(String msg) {
         ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(this.players.values());
         for (GuardianPlayer p : players) {
-            arena.getPlugin().getServer().getPlayer(p.getUniqueId()).sendMessage(msg);
+            p.getBukkitPlayer().sendMessage(msg);
         }
     }
 
     public void broadcastSound(Sound sound) {
         ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(this.players.values());
         for (GuardianPlayer p : players) {
-            arena.getPlugin().getServer().getPlayer(p.getUniqueId()).playSound(arena.getPlugin().getServer().getPlayer(p.getUniqueId()).getLocation(), sound, 3, 2);
+            p.getBukkitPlayer().playSound(arena.getPlugin().getServer().getPlayer(p.getUniqueId()).getLocation(), sound, 3, 2);
         }
     }
 

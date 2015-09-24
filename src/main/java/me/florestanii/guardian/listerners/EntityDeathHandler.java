@@ -20,14 +20,12 @@ public class EntityDeathHandler implements Listener {
     @EventHandler
     public void onItemDrop(EntityDeathEvent e) {
         Player killer = e.getEntity().getKiller();
-        if (killer != null) {
-            if (plugin.isPlayerInArena(killer)) {
-                if (e.getEntityType() == EntityType.IRON_GOLEM) {
-                    e.getDrops().clear();
-                    e.getEntity().getWorld().dropItemNaturally(e.getEntity().getLocation(), new ItemStack(Material.NETHER_STAR, 1));
-                } else {
-                    e.getDrops().clear();
-                }
+        if (killer != null && plugin.isPlayerInArena(killer)) {
+            if (e.getEntityType() == EntityType.IRON_GOLEM) {
+                e.getDrops().clear();
+                e.getEntity().getWorld().dropItemNaturally(e.getEntity().getLocation(), new ItemStack(Material.NETHER_STAR, 1));
+            } else {
+                e.getDrops().clear();
             }
         }
     }

@@ -6,7 +6,6 @@ import me.florestanii.guardian.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -17,10 +16,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.List;
-import java.util.Map;
 
 public class PlayerInteractHandler implements Listener {
     private final Guardian plugin;
@@ -32,9 +27,7 @@ public class PlayerInteractHandler implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        if (e.getClickedBlock() == null) return;
-
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock() != null) {
             GuardianArena arena = plugin.getArena(e.getPlayer());
             if (arena != null) {
                 if (arena.getLobby().isPlayerInLobby(e.getPlayer())) {
@@ -90,41 +83,7 @@ public class PlayerInteractHandler implements Listener {
                         p.openInventory(shopInv);
                         break;
                 }
-            } else {
-                e.setCancelled(true);
             }
         }
-    }
-
-    public ItemStack getItemStackForOffer(Material mat, int amount, byte damage, String displayname, List<String> lore) {
-        ItemStack item = new ItemStack(mat, amount, (short) damage);
-        ItemMeta meta = item.getItemMeta();
-
-        if (displayname != null) {
-            meta.setDisplayName(displayname);
-        }
-
-        if (lore != null) {
-            meta.setLore(lore);
-        }
-        item.setItemMeta(meta);
-
-        return item;
-
-    }
-
-    public ItemStack getItemStackForOffer(Material mat, int amount, String displayname, Map<Enchantment, Integer> enchs) {
-        ItemStack item = new ItemStack(mat, amount);
-        ItemMeta meta = item.getItemMeta();
-        if (displayname != null) {
-            meta.setDisplayName(displayname);
-            item.setItemMeta(meta);
-        }
-
-        if (enchs != null) {
-            item.addUnsafeEnchantments(enchs);
-        }
-
-        return item;
     }
 }

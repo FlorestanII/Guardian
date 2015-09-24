@@ -35,9 +35,6 @@ public class PlayerChatHandler implements Listener {
                     e.setCancelled(true);
                 }
             }
-        } else {
-            e.setCancelled(true);
         }
     }
-
 }

@@ -36,8 +36,7 @@ public class Guardian extends JavaPlugin implements CommandHandler {
         }
 
         //TODO Unregister all these handlers on disable. And register them here, not in their constructors
-        new BlockBreakHandler(this);
-        new BlockPlaceHandler(this);
+        getServer().getPluginManager().registerEvents(new ArenaProtectionListener(this), this);
         new PlayerDeathHandler(this);
         new PlayerRespawnHandler(this);
         new PlayerQuitHandler(this);
