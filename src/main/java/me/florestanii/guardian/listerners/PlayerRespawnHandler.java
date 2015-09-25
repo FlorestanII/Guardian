@@ -31,7 +31,7 @@ public class PlayerRespawnHandler implements Listener {
                 e.setRespawnLocation(arena.getLeavePos());
                 p.sendMessage(ChatColor.DARK_RED + "Du bist nun ausgeschieden!");
                 final GuardianTeam team = arena.getTeamOfPlayer(p);
-                arena.kickPlayer(p, team.getChatColor() + p.getDisplayName() + ChatColor.GRAY + " ist nun ausgeschieden!");
+                arena.kickPlayer(p, team.getChatColor() + p.getName() + ChatColor.GRAY + " ist nun ausgeschieden!");
             }
         }
     }

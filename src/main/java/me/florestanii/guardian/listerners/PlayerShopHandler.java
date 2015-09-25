@@ -162,7 +162,7 @@ public class PlayerShopHandler implements Listener {
         foodMerchant.setTitle("Food");
 
         MerchantOffer apple = new MerchantOffer(emeralds(1), new ItemStack(Material.APPLE, 1));
-        MerchantOffer cooked_beef = new MerchantOffer(emeralds(1), new ItemStack(Material.COOKED_BEEF, 1));
+        MerchantOffer cooked_beef = new MerchantOffer(emeralds(1), new ItemStack(Material.COOKED_BEEF, 2));
         MerchantOffer golden_apple = new MerchantOffer(diamonds(1), new ItemStack(Material.GOLDEN_APPLE, 1));
 
         foodMerchant.addOffer(apple);

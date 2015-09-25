@@ -36,7 +36,7 @@ public class ArenaCommands implements CommandHandler {
     public void leave(Player player) {
         GuardianArena arena = guardian.getArena(player);
         if (arena != null) {
-            arena.kickPlayer(player, player.getDisplayName() + " hat das Spiel verlassen.");
+            arena.kickPlayer(player, player.getName() + " hat das Spiel verlassen.");
         } else {
             Guardian.prefix().append("Du befindest dich in keiner Guardian-Runde!").darkRed().sendTo(player);
         }

@@ -24,14 +24,14 @@ public class PlayerChatHandler implements Listener {
         if (arena != null) {
             String msg = e.getMessage();
             if (arena.getLobby().isPlayerInLobby(p)) {
-                arena.getLobby().broadcastMessage(ChatColor.GREEN + p.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg);
+                arena.getLobby().broadcastMessage(ChatColor.GREEN + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg);
                 e.setCancelled(true);
             } else {
                 if (msg.startsWith("@all")) {
-                    arena.broadcastMessage(ChatColor.GRAY + "[GLOBAL] " + arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg.replace("@all", ""));
+                    arena.broadcastMessage(ChatColor.GRAY + "[GLOBAL] " + arena.getTeamOfPlayer(p).getChatColor() + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg.replace("@all", ""));
                     e.setCancelled(true);
                 } else {
-                    arena.getTeamOfPlayer(p).broadcastMessage(ChatColor.GRAY + "[TEAM] " + arena.getTeamOfPlayer(p).getChatColor() + p.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg);
+                    arena.getTeamOfPlayer(p).broadcastMessage(ChatColor.GRAY + "[TEAM] " + arena.getTeamOfPlayer(p).getChatColor() + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + msg);
                     e.setCancelled(true);
                 }
             }
