@@ -35,12 +35,6 @@ public class PlayerInteractHandler implements Listener {
                 } else {
                     e.setCancelled(true);
                 }
-            } else {
-                if (e.getPlayer().hasPermission("guardian.arena.admin")) {
-                    e.setCancelled(false);
-                } else {
-                    e.setCancelled(true);
-                }
             }
         }
     }
