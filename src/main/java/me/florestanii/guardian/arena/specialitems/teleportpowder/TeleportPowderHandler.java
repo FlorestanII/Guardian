@@ -77,10 +77,9 @@ public class TeleportPowderHandler implements Listener {
     }
 
     private void stopCountdown(Player player) {
-        TeleportPowderCountdown countdown = countdowns.get(player.getUniqueId());
+        TeleportPowderCountdown countdown = countdowns.remove(player.getUniqueId());
         if (countdown != null) {
             countdown.cancel();
         }
-        countdowns.remove(countdown);
     }
 }
