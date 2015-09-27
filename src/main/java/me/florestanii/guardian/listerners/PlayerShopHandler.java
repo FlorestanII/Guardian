@@ -31,31 +31,24 @@ public class PlayerShopHandler implements Listener {
 
                 switch (e.getCurrentItem().getType()) {
                     case IRON_PICKAXE:
-                    	player.closeInventory();
                         showPickaxeMerchant(player);
                         break;
                     case CHAINMAIL_CHESTPLATE:
-                    	player.closeInventory();
                         showArmorMerchant(player);
                         break;
                     case BOW:
-                    	player.closeInventory();
                         showBowMerchant(player);
                         break;
                     case APPLE:
-                    	player.closeInventory();
-                        showFootMerchant(player);
+                        showFoodMerchant(player);
                         break;
                     case ENDER_PEARL:
-                    	player.closeInventory();
                         showSpecialMerchant(player);
                         break;
                     case POTION:
-                    	player.closeInventory();
                         showPotionMerchant(player);
                         break;
                     case IRON_SWORD:
-                    	player.closeInventory();
                         showWeaponsMerchant(player);
                         break;
                 }
@@ -163,7 +156,7 @@ public class PlayerShopHandler implements Listener {
         weaponsMerchant.openTrading(player);
     }
 
-    private void showFootMerchant(Player player) {
+    private void showFoodMerchant(Player player) {
         Merchant foodMerchant = new Merchant();
         foodMerchant.setTitle("Food");
 
