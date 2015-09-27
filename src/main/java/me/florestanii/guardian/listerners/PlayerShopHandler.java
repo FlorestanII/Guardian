@@ -28,28 +28,34 @@ public class PlayerShopHandler implements Listener {
             Player player = (Player) e.getWhoClicked();
             if (plugin.isPlayerInArena(player)) {
                 e.setCancelled(true);
-                player.closeInventory();
 
                 switch (e.getCurrentItem().getType()) {
                     case IRON_PICKAXE:
+                    	player.closeInventory();
                         showPickaxeMerchant(player);
                         break;
                     case CHAINMAIL_CHESTPLATE:
+                    	player.closeInventory();
                         showArmorMerchant(player);
                         break;
                     case BOW:
+                    	player.closeInventory();
                         showBowMerchant(player);
                         break;
                     case APPLE:
+                    	player.closeInventory();
                         showFootMerchant(player);
                         break;
                     case ENDER_PEARL:
+                    	player.closeInventory();
                         showSpecialMerchant(player);
                         break;
                     case POTION:
+                    	player.closeInventory();
                         showPotionMerchant(player);
                         break;
                     case IRON_SWORD:
+                    	player.closeInventory();
                         showWeaponsMerchant(player);
                         break;
                 }

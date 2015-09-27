@@ -81,5 +81,6 @@ public class TeleportPowderHandler implements Listener {
         if (countdown != null) {
             countdown.cancel();
         }
+        countdowns.remove(countdown);
     }
 }
