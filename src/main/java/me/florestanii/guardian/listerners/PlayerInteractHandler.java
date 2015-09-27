@@ -49,35 +49,42 @@ public class PlayerInteractHandler implements Listener {
 
     @EventHandler
     public void onInteractEntity(PlayerInteractEntityEvent e) {
-        if (e.getRightClicked() instanceof Villager) {
-            Player p = e.getPlayer();
-            if (plugin.isPlayerInArena(p)) {
-                e.setCancelled(true);
+       
+        Player p = e.getPlayer();
+        if (plugin.isPlayerInArena(p)) {
+        	
+        	if(plugin.getArena(p).getLobby().isPlayerInLobby(p)){
+        		e.setCancelled(true);
+        		return;
+        	}
+        	if (e.getRightClicked() instanceof Villager) {
+        	
+        		e.setCancelled(true);
 
-                switch (e.getRightClicked().getCustomName() == null ? "" : e.getRightClicked().getCustomName()) {
-                    case "Shop":
-                        Inventory shopInv = plugin.getServer().createInventory(null, 27, "Shop");
+        		switch (e.getRightClicked().getCustomName() == null ? "" : e.getRightClicked().getCustomName()) {
+                	case "Shop":
+                		Inventory shopInv = plugin.getServer().createInventory(null, 27, "Shop");
 
-                        for (int i = 0; i < 10; i++) {
-                            shopInv.setItem(i, Util.renameItemStack(new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData()), " "));
-                        }
+                		for (int i = 0; i < 10; i++) {
+                			shopInv.setItem(i, Util.renameItemStack(new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData()), " "));
+                		}
 
-                        shopInv.setItem(10, Util.renameItemStack(new ItemStack(Material.IRON_SWORD), ChatColor.RESET + "Weapons"));
-                        shopInv.setItem(11, Util.renameItemStack(new ItemStack(Material.CHAINMAIL_CHESTPLATE), ChatColor.RESET + "Armor"));
-                        shopInv.setItem(12, Util.renameItemStack(new ItemStack(Material.IRON_PICKAXE), ChatColor.RESET + "Pickaxes"));
-                        shopInv.setItem(13, Util.renameItemStack(new ItemStack(Material.BOW), ChatColor.RESET + "Bows"));
-                        shopInv.setItem(14, Util.renameItemStack(new ItemStack(Material.POTION), ChatColor.RESET + "Potions"));
-                        shopInv.setItem(15, Util.renameItemStack(new ItemStack(Material.APPLE), ChatColor.RESET + "Food"));
-                        shopInv.setItem(16, Util.renameItemStack(new ItemStack(Material.ENDER_PEARL), ChatColor.RESET + "Special"));
+                		shopInv.setItem(10, Util.renameItemStack(new ItemStack(Material.IRON_SWORD), ChatColor.RESET + "Weapons"));
+                		shopInv.setItem(11, Util.renameItemStack(new ItemStack(Material.CHAINMAIL_CHESTPLATE), ChatColor.RESET + "Armor"));
+                		shopInv.setItem(12, Util.renameItemStack(new ItemStack(Material.IRON_PICKAXE), ChatColor.RESET + "Pickaxes"));
+                		shopInv.setItem(13, Util.renameItemStack(new ItemStack(Material.BOW), ChatColor.RESET + "Bows"));
+                		shopInv.setItem(14, Util.renameItemStack(new ItemStack(Material.POTION), ChatColor.RESET + "Potions"));
+                		shopInv.setItem(15, Util.renameItemStack(new ItemStack(Material.APPLE), ChatColor.RESET + "Food"));
+                		shopInv.setItem(16, Util.renameItemStack(new ItemStack(Material.ENDER_PEARL), ChatColor.RESET + "Special"));
 
-                        for (int i = 17; i < 27; i++) {
-                            shopInv.setItem(i, Util.renameItemStack(new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData()), " "));
-                        }
+                		for (int i = 17; i < 27; i++) {
+                			shopInv.setItem(i, Util.renameItemStack(new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData()), " "));
+                		}
 
-                        p.openInventory(shopInv);
-                        break;
-                }
-            }
+                		p.openInventory(shopInv);
+                		break;
+        		}
+        	}
         }
     }
 }
