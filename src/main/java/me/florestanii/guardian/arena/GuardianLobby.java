@@ -1,15 +1,13 @@
 package me.florestanii.guardian.arena;
 
+import de.craften.plugins.mcguilib.text.TextBuilder;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
 import me.florestanii.guardian.arena.team.GuardianTeam;
 import me.florestanii.guardian.util.ItemStackBuilder;
 import me.florestanii.guardian.util.Util;
-
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-
-import de.craften.plugins.mcguilib.text.TextBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,7 @@ public class GuardianLobby {
     HashMap<UUID, GuardianPlayer> players = new HashMap<UUID, GuardianPlayer>();
 
     Map<Player, GuardianTeam> preTeamSelection = new HashMap<Player, GuardianTeam>();
-    
+
     final int maxPlayers;
     final int minPlayers;
 
@@ -85,8 +83,7 @@ public class GuardianLobby {
     }
 
     public boolean isCountdownStarted() {
-        if (countdownScheduler == -1) return false;
-        else return true;
+        return countdownScheduler != -1;
     }
 
     public void joinPlayer(GuardianPlayer player) {
@@ -157,16 +154,18 @@ public class GuardianLobby {
     public ArrayList<GuardianPlayer> getPlayers() {
         return new ArrayList<GuardianPlayer>(this.players.values());
     }
-    public void preselectTeam(Player p, GuardianTeam team){
-    	preTeamSelection.put(p, team);
-      	p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).append(" [").color(ChatColor.WHITE).append(team.getName()).color(team.getChatColor()).append("]").color(ChatColor.WHITE).getSingleLine());
+
+    public void preselectTeam(Player p, GuardianTeam team) {
+        preTeamSelection.put(p, team);
+        p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).append(" [").color(ChatColor.WHITE).append(team.getName()).color(team.getChatColor()).append("]").color(ChatColor.WHITE).getSingleLine());
     }
-    public void removePreselectedTeam(Player p){
-    	if(preTeamSelection.containsKey(p)){
-			preTeamSelection.remove(p);
-			p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).getSingleLine());
-		}
+
+    public void removePreselectedTeam(Player p) {
+        if (preTeamSelection.remove(p) != null) {
+            p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).getSingleLine());
+        }
     }
+
     public void broadcastMessage(String msg) {
         for (GuardianPlayer p : players.values()) {
             p.getBukkitPlayer().sendMessage(msg);
@@ -204,18 +203,20 @@ public class GuardianLobby {
     public Location getLocation() {
         return location;
     }
-    public ArrayList<Player> getAllPlayersOfPreTeamSelection(GuardianTeam team){
-    	ArrayList<Player> players = new ArrayList<Player>();
-    	
-    	for(Player p : preTeamSelection.keySet()){
-    		if(preTeamSelection.get(p).equals(team)){
-    			players.add(p);
-    		}
-    	}
-    	
-    	return players;
+
+    public ArrayList<Player> getAllPlayersOfPreTeamSelection(GuardianTeam team) {
+        ArrayList<Player> players = new ArrayList<Player>();
+
+        for (Map.Entry<Player, GuardianTeam> preselection : preTeamSelection.entrySet()) {
+            if (preselection.getValue().equals(team)) {
+                players.add(preselection.getKey());
+            }
+        }
+
+        return players;
     }
-    public GuardianTeam getPreSelectionOfPlayer(Player p){
-    	return preTeamSelection.get(p);
+
+    public GuardianTeam getPreSelectionOfPlayer(Player p) {
+        return preTeamSelection.get(p);
     }
 }

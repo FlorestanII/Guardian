@@ -3,7 +3,6 @@ package me.florestanii.guardian.arena.team;
 import me.florestanii.guardian.arena.GuardianArena;
 import me.florestanii.guardian.arena.config.GuardianTeamConfig;
 import me.florestanii.guardian.util.Util;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -136,17 +135,18 @@ public class GuardianTeam {
 
     @Override
     public boolean equals(Object obj) {
-    	return (obj instanceof GuardianTeam && name.equals(((GuardianTeam) obj).getName()));
+        return obj instanceof GuardianTeam && name.equals(((GuardianTeam) obj).getName());
     }
-    
-    public boolean isEmpty(){
-    	return getPlayerCount() == 0;
+
+    public boolean isEmpty() {
+        return getPlayerCount() == 0;
     }
-    
+
     public List<Location> getRespawnBlocks() {
         return respawnBlocks;
     }
-    public boolean isFull(){
-    	return !(getPlayerCount() < (float)((float)arena.getPlayerCount()/(float)arena.getTeams().size()));
+
+    public boolean isFull() {
+        return getPlayerCount() >= arena.getPlayerCount() / (float) arena.getTeams().size();
     }
 }

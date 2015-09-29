@@ -1,11 +1,6 @@
 package me.florestanii.guardian.arena;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import de.craften.plugins.mcguilib.text.TextBuilder;
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.config.GuardianArenaConfig;
 import me.florestanii.guardian.arena.config.GuardianTeamConfig;
@@ -15,19 +10,13 @@ import me.florestanii.guardian.arena.team.GuardianPlayer;
 import me.florestanii.guardian.arena.team.GuardianTeam;
 import me.florestanii.guardian.util.ColorConverter;
 import me.florestanii.guardian.util.Util;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
 
-import de.craften.plugins.mcguilib.text.TextBuilder;
+import java.util.*;
 
 public class GuardianArena {
     private final Guardian plugin;
@@ -90,7 +79,7 @@ public class GuardianArena {
             if (lobby.isPlayerInLobby(p)) {
                 lobby.leftPlayer(p);
             } else {
-            	final GuardianTeam team = getTeamOfPlayer(p);
+                final GuardianTeam team = getTeamOfPlayer(p);
                 final List<GuardianTeam> rivalTeams = getRivalTeamsOfPlayer(p);
                 getTeamOfPlayer(p).removePlayer(p);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -99,7 +88,7 @@ public class GuardianArena {
                     public void run() {
                         //player has left and thus the rival team wins if there is only one team left
                         if (rivalTeams.size() == 1 && team.isEmpty()) {
-                        	
+
                             GuardianTeam winner = rivalTeams.get(0);
                             broadcastMessage(ChatColor.GREEN + "Team " + winner.getChatColor() + winner.getName() + ChatColor.GREEN + " hat gewonnen!");
                             broadcastSound(Sound.FIREWORK_LAUNCH);
@@ -109,7 +98,7 @@ public class GuardianArena {
                     }
                 }, 25);
 
-               
+
             }
 
             p.getInventory().clear();
@@ -211,48 +200,48 @@ public class GuardianArena {
 
     public void startArena(List<GuardianPlayer> players, Map<Player, GuardianTeam> preTeamSelection) {
         state = GuardianArenaState.INGAME;
-        
+
         List<GuardianTeam> teams = new ArrayList<>(this.teams.values());
-        
+
         List<GuardianPlayer> playersWhoDonotSelectATeam = new ArrayList<GuardianPlayer>();
-        
-        for(GuardianPlayer player : players){
-        	Player p = plugin.getServer().getPlayer(player.getUniqueId());
-        	
-        	if(preTeamSelection.containsKey(p)){
-        		getTeam(preTeamSelection.get(p).getName().toLowerCase()).joinPlayer(player);
-        		p.getInventory().clear();
+
+        for (GuardianPlayer player : players) {
+            Player p = plugin.getServer().getPlayer(player.getUniqueId());
+
+            if (preTeamSelection.containsKey(p)) {
+                getTeam(preTeamSelection.get(p).getName().toLowerCase()).joinPlayer(player);
+                p.getInventory().clear();
                 Util.healPlayer(p);
                 givePlayerStartKit(p);
-               
-        	}else{
-        		playersWhoDonotSelectATeam.add(player);
-        	}
-        	
+
+            } else {
+                playersWhoDonotSelectATeam.add(player);
+            }
+
         }
-        
-        for (GuardianPlayer player : playersWhoDonotSelectATeam){
-        	Player p = plugin.getServer().getPlayer(player.getUniqueId());
-        	for(GuardianTeam team : teams){
-        		if(!team.isFull()){
-        			
-        			team.joinPlayer(player);
-        			p.getInventory().clear();
+
+        for (GuardianPlayer player : playersWhoDonotSelectATeam) {
+            Player p = plugin.getServer().getPlayer(player.getUniqueId());
+            for (GuardianTeam team : teams) {
+                if (!team.isFull()) {
+
+                    team.joinPlayer(player);
+                    p.getInventory().clear();
                     Util.healPlayer(p);
                     givePlayerStartKit(p);
                     break;
-                    
-        		}
-        	}
-        	
+
+                }
+            }
+
         }
         lobby.resetLobby();
-        
+
         for (ItemSpawner spawner : itemSpawners) {
             spawner.startSpawner();
         }
         guardianSpawner.startSpawner();
-        
+
     }
 
     public GuardianLobby getLobby() {
@@ -335,10 +324,12 @@ public class GuardianArena {
     public void setState(GuardianArenaState state) {
         this.state = state;
     }
-    public Collection<GuardianTeam> getTeams(){
-    	return teams.values();
+
+    public Collection<GuardianTeam> getTeams() {
+        return teams.values();
     }
-    public int getPlayerCount(){
-    	return playerCount;
+
+    public int getPlayerCount() {
+        return playerCount;
     }
 }

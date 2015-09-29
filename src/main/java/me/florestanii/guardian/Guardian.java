@@ -48,7 +48,7 @@ public class Guardian extends JavaPlugin implements CommandHandler {
         new EntityDeathHandler(this);
         getServer().getPluginManager().registerEvents(new PlayerShopHandler(this), this);
         new TeleportPowderHandler(this);
-        getServer().getPluginManager().registerEvents(new TeamSelectHandler(this), this);
+        getServer().getPluginManager().registerEvents(new TeamSelectionHandler(this), this);
         
         
         SubCommandHandler commandHandler = new GuardianCommandHandler();
