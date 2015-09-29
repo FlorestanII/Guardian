@@ -84,10 +84,10 @@ public class TeamSelectHandler implements Listener{
 					if(team != null){
 						
 						if(arena.getLobby().getPreSelectionOfPlayer(p) != null && arena.getLobby().getPreSelectionOfPlayer(p).equals(team)){
-							arena.getLobby().setPreTeamSelection(p, null);
+							arena.getLobby().removePreselectedTeam(p);
 							p.sendMessage(TextBuilder.create().append("Du hast das Team ").color(ChatColor.GRAY).append(team.getName()).color(team.getChatColor()).append(" verlassen!").color(ChatColor.GRAY).getSingleLine());
 						}else if(arena.getLobby().getAllPlayersOfPreTeamSelection(team).size() < (float)arena.getLobby().getPlayerCount()/(float)arena.getTeams().size()){
-							arena.getLobby().setPreTeamSelection(p, team);	
+							arena.getLobby().preselectTeam(p, team);	
 							p.sendMessage(TextBuilder.create().append("Du bist dem Team ").color(ChatColor.GRAY).append(team.getName()).color(team.getChatColor()).append(" beigetreten!").color(ChatColor.GRAY).getSingleLine());
 						}else{
 							p.sendMessage(TextBuilder.create("Dieses Team ist voll").color(ChatColor.DARK_RED).getSingleLine());

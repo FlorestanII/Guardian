@@ -157,16 +157,15 @@ public class GuardianLobby {
     public ArrayList<GuardianPlayer> getPlayers() {
         return new ArrayList<GuardianPlayer>(this.players.values());
     }
-    public void setPreTeamSelection(Player p, GuardianTeam team){
-    	if(team == null){
-    		if(preTeamSelection.containsKey(p)){
-    			preTeamSelection.remove(p);
-    			p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).getSingleLine());
-    		}
-    	}else{
-    		preTeamSelection.put(p, team);
-        	p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).append(" [").color(ChatColor.WHITE).append(team.getName()).color(team.getChatColor()).append("]").color(ChatColor.WHITE).getSingleLine());
-    	}
+    public void preselectTeam(Player p, GuardianTeam team){
+    	preTeamSelection.put(p, team);
+      	p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).append(" [").color(ChatColor.WHITE).append(team.getName()).color(team.getChatColor()).append("]").color(ChatColor.WHITE).getSingleLine());
+    }
+    public void removePreselectedTeam(Player p){
+    	if(preTeamSelection.containsKey(p)){
+			preTeamSelection.remove(p);
+			p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).getSingleLine());
+		}
     }
     public void broadcastMessage(String msg) {
         for (GuardianPlayer p : players.values()) {

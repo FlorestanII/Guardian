@@ -136,25 +136,17 @@ public class GuardianTeam {
 
     @Override
     public boolean equals(Object obj) {
-    	if(obj instanceof GuardianTeam){
-    		if(name.equals(((GuardianTeam) obj).getName())){
-    			return true;
-    		}else{
-    			return false;
-    		}
-    	}else{
-    		return false;
-    	}
+    	return (obj instanceof GuardianTeam && name.equals(((GuardianTeam) obj).getName()));
+    }
+    
+    public boolean isEmpty(){
+    	return getPlayerCount() == 0;
     }
     
     public List<Location> getRespawnBlocks() {
         return respawnBlocks;
     }
     public boolean isFull(){
-    	if(getPlayerCount() < (float)((float)arena.getPlayerCount()/(float)arena.getTeams().size())){
-			return false;	
-		}else{
-			return true;
-		}
+    	return !(getPlayerCount() < (float)((float)arena.getPlayerCount()/(float)arena.getTeams().size()));
     }
 }

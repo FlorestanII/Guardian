@@ -92,12 +92,14 @@ public class GuardianArena {
             } else {
             	final GuardianTeam team = getTeamOfPlayer(p);
                 final List<GuardianTeam> rivalTeams = getRivalTeamsOfPlayer(p);
+                getTeamOfPlayer(p).removePlayer(p);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 
                     @Override
                     public void run() {
                         //player has left and thus the rival team wins if there is only one team left
-                        if (rivalTeams.size() == 1 && team.getPlayerCount()-1 <= 0) {
+                        if (rivalTeams.size() == 1 && team.isEmpty()) {
+                        	
                             GuardianTeam winner = rivalTeams.get(0);
                             broadcastMessage(ChatColor.GREEN + "Team " + winner.getChatColor() + winner.getName() + ChatColor.GREEN + " hat gewonnen!");
                             broadcastSound(Sound.FIREWORK_LAUNCH);
@@ -107,7 +109,7 @@ public class GuardianArena {
                     }
                 }, 25);
 
-                getTeamOfPlayer(p).removePlayer(p);
+               
             }
 
             p.getInventory().clear();
