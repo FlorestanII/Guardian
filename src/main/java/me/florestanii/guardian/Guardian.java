@@ -10,6 +10,7 @@ import me.florestanii.guardian.commands.GuardianCommandHandler;
 import me.florestanii.guardian.listerners.*;
 import me.florestanii.guardian.util.commands.CommandHandler;
 import me.florestanii.guardian.util.commands.SubCommandHandler;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -47,7 +48,9 @@ public class Guardian extends JavaPlugin implements CommandHandler {
         new EntityDeathHandler(this);
         getServer().getPluginManager().registerEvents(new PlayerShopHandler(this), this);
         new TeleportPowderHandler(this);
-
+        getServer().getPluginManager().registerEvents(new TeamSelectHandler(this), this);
+        
+        
         SubCommandHandler commandHandler = new GuardianCommandHandler();
         commandHandler.addHandlers(this, new ArenaCommands(this));
         getCommand("guardian").setExecutor(commandHandler);

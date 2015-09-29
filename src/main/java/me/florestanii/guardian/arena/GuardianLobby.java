@@ -1,18 +1,27 @@
 package me.florestanii.guardian.arena;
 
 import me.florestanii.guardian.arena.team.GuardianPlayer;
+import me.florestanii.guardian.arena.team.GuardianTeam;
+import me.florestanii.guardian.util.ItemStackBuilder;
 import me.florestanii.guardian.util.Util;
+
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+
+import de.craften.plugins.mcguilib.text.TextBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class GuardianLobby {
     private GuardianArena arena;
     HashMap<UUID, GuardianPlayer> players = new HashMap<UUID, GuardianPlayer>();
 
+    Map<Player, GuardianTeam> preTeamSelection = new HashMap<Player, GuardianTeam>();
+    
     final int maxPlayers;
     final int minPlayers;
 
@@ -47,7 +56,7 @@ public class GuardianLobby {
 
                 } else {
                     cancelCountdown(true);
-                    arena.startArena(getPlayers());
+                    arena.startArena(getPlayers(), preTeamSelection);
                     broadcastNote(Instrument.PIANO, new Note(24));
                     broadcastMessage(ChatColor.RED + "Die Runde startet nun, Viel Glück!");
                     System.out.println("Arena started!");
@@ -86,6 +95,7 @@ public class GuardianLobby {
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).teleport(location);
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setGameMode(GameMode.SURVIVAL);
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).getInventory().clear();
+            arena.getPlugin().getServer().getPlayer(player.getUniqueId()).getInventory().addItem(ItemStackBuilder.builder().setType(Material.NETHER_STAR).setAmount(1).setDisplayName("Wähle dein Team aus").addEnchantment(Enchantment.DURABILITY).build());
             arena.getPlugin().getServer().getPlayer(player.getUniqueId()).setPlayerListName(ChatColor.GREEN + player.getDisplayName());
             Util.setTagColor(arena.getPlugin(), arena.getPlugin().getServer().getPlayer(player.getUniqueId()), ChatColor.GREEN);
 
@@ -110,6 +120,7 @@ public class GuardianLobby {
 
     public void resetLobby() {
         players.clear();
+        preTeamSelection.clear();
         countdown = startCountdown;
         countdownScheduler = -1;
         controlPlayerCount = true;
@@ -146,7 +157,17 @@ public class GuardianLobby {
     public ArrayList<GuardianPlayer> getPlayers() {
         return new ArrayList<GuardianPlayer>(this.players.values());
     }
-
+    public void setPreTeamSelection(Player p, GuardianTeam team){
+    	if(team == null){
+    		if(preTeamSelection.containsKey(p)){
+    			preTeamSelection.remove(p);
+    			p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).getSingleLine());
+    		}
+    	}else{
+    		preTeamSelection.put(p, team);
+        	p.setPlayerListName(TextBuilder.create(p.getName()).color(ChatColor.GREEN).append(" [").color(ChatColor.WHITE).append(team.getName()).color(team.getChatColor()).append("]").color(ChatColor.WHITE).getSingleLine());
+    	}
+    }
     public void broadcastMessage(String msg) {
         for (GuardianPlayer p : players.values()) {
             p.getBukkitPlayer().sendMessage(msg);
@@ -183,5 +204,19 @@ public class GuardianLobby {
 
     public Location getLocation() {
         return location;
+    }
+    public ArrayList<Player> getAllPlayersOfPreTeamSelection(GuardianTeam team){
+    	ArrayList<Player> players = new ArrayList<Player>();
+    	
+    	for(Player p : preTeamSelection.keySet()){
+    		if(preTeamSelection.get(p).equals(team)){
+    			players.add(p);
+    		}
+    	}
+    	
+    	return players;
+    }
+    public GuardianTeam getPreSelectionOfPlayer(Player p){
+    	return preTeamSelection.get(p);
     }
 }
