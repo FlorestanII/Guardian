@@ -105,6 +105,8 @@ public class GuardianArena {
             p.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
             p.teleport(leavePos);
             p.setPlayerListName(p.getName());
+            p.setLevel(0);
+            p.setExp(0);
             Util.setTagColor(plugin, p, ChatColor.WHITE);
             Util.healPlayer(p);
 
