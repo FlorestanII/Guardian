@@ -2,6 +2,8 @@ package me.florestanii.guardian.listerners;
 
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.GuardianArena;
+
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -43,9 +45,21 @@ public class PlayerAttackHandler implements Listener {
                         e.setCancelled(true);
                         return;
                     }
-                    if (arena.getTeamOfPlayer(p).getName().equals(arena.getTeamOfPlayer(damager).getName())) {
+                    if (arena.getTeamOfPlayer(p).equals(arena.getTeamOfPlayer(damager))) {
                         e.setCancelled(true); //disable hitting players of the own team
                     }
+                } else if (e.getDamager() instanceof Arrow) {
+                	Arrow arrow = (Arrow) e.getDamager();
+                	if (arrow.getShooter() instanceof Player) {
+                		Player shooter = (Player) arrow.getShooter();
+                		if (!arena.isPlayerInArena(shooter)) {
+                			e.setCancelled(true);
+                			return;
+                		}
+                		if (arena.getTeamOfPlayer(shooter).equals(arena.getTeamOfPlayer(p))) {
+                			e.setCancelled(true); //disable shooting players of the own team
+                		}
+                	}
                 }
             }
         } else if (e.getEntity() instanceof Villager) {
@@ -55,6 +69,14 @@ public class PlayerAttackHandler implements Listener {
                 if (plugin.isPlayerInArena(damager)) {
                     e.setCancelled(true);
                 }
+            } else if (e.getDamager() instanceof Arrow) {
+            	Arrow arrow = (Arrow) e.getDamager();
+            	if (arrow.getShooter() instanceof Player) {
+            		Player shooter = (Player) arrow.getShooter();
+            		if (plugin.isPlayerInArena(shooter)) {
+            			e.setCancelled(true);
+            		}
+            	}
             }
         }
     }
