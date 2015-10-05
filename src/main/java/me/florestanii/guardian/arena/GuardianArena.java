@@ -69,6 +69,13 @@ public class GuardianArena {
             player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
             player.getInventory().setHeldItemSlot(0);
             Util.healPlayer(player);
+            
+            for(Player p : plugin.getServer().getOnlinePlayers()){
+            	if(!isPlayerInArena(p)){
+            		p.hidePlayer(player);
+            	}
+            }
+            
         }
     }
 
@@ -110,6 +117,12 @@ public class GuardianArena {
             Util.setTagColor(plugin, p, ChatColor.WHITE);
             Util.healPlayer(p);
 
+            for(Player player : plugin.getServer().getOnlinePlayers()){
+            	if(!plugin.isPlayerInArena(player)){
+            		player.showPlayer(p);
+            	}
+            }
+            
             if (playerCount == 0) {
                 resetArena();
             }
