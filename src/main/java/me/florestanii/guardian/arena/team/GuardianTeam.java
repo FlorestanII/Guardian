@@ -2,6 +2,7 @@ package me.florestanii.guardian.arena.team;
 
 import me.florestanii.guardian.arena.GuardianArena;
 import me.florestanii.guardian.arena.config.GuardianTeamConfig;
+import me.florestanii.guardian.util.TitleAPI;
 import me.florestanii.guardian.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -101,6 +102,12 @@ public class GuardianTeam {
         ArrayList<GuardianPlayer> players = new ArrayList<GuardianPlayer>(this.players.values());
         for (GuardianPlayer p : players) {
             p.getBukkitPlayer().sendMessage(msg);
+        }
+    }
+
+    public void broadcastTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        for (GuardianPlayer p : players.values()) {
+            TitleAPI.sendTitle(p.getBukkitPlayer(), fadeIn, stay, fadeOut, title, subtitle);
         }
     }
 
