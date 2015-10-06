@@ -98,6 +98,7 @@ public class GuardianArena {
 
                             GuardianTeam winner = rivalTeams.get(0);
                             broadcastMessage(ChatColor.GREEN + "Team " + winner.getChatColor() + winner.getName() + ChatColor.GREEN + " hat gewonnen!");
+                            broadcastTitle(ChatColor.GREEN + "Team " + winner.getChatColor() + winner.getName(), ChatColor.GREEN + " hat gewonnen!", 5, 60, 5);
                             broadcastSound(Sound.FIREWORK_LAUNCH);
                             startEndCountdown();
 
@@ -163,6 +164,7 @@ public class GuardianArena {
                                     .append(String.valueOf(endCountdown)).yellow()
                                     .append(" Sekunden neu gestartet.").red()
                                     .getSingleLine());
+                            broadcastTitle(ChatColor.RED + "" + endCountdown, "", 5, 13, 2);
                             System.out.println(endCountdown);
                         }
 
@@ -323,6 +325,12 @@ public class GuardianArena {
             team.broadcastMessage(msg);
         }
         lobby.broadcastMessage(msg);
+    }
+
+    public void broadcastTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        for (GuardianTeam team : teams.values()) {
+            team.broadcastTitle(title, subtitle, fadeIn, stay, fadeOut);
+        }
     }
 
     public void broadcastSound(Sound sound) {

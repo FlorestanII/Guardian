@@ -2,7 +2,6 @@ package me.florestanii.guardian.listerners;
 
 import me.florestanii.guardian.Guardian;
 import me.florestanii.guardian.arena.GuardianArena;
-import me.florestanii.guardian.util.ReflectionUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,11 +37,7 @@ public class PlayerDeathHandler implements Listener {
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        ReflectionUtils.sendRespawnPacket(p);
-                    } catch (Exception e1) {
-                        plugin.getLogger().warning("Could not send respawn packet.");
-                    }
+                    p.spigot().respawn();
                 }
             }, 20);
         }

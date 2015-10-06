@@ -4,6 +4,7 @@ import de.craften.plugins.mcguilib.text.TextBuilder;
 import me.florestanii.guardian.arena.team.GuardianPlayer;
 import me.florestanii.guardian.arena.team.GuardianTeam;
 import me.florestanii.guardian.util.ItemStackBuilder;
+import me.florestanii.guardian.util.TitleAPI;
 import me.florestanii.guardian.util.Util;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -46,6 +47,7 @@ public class GuardianLobby {
                 if (countdown != 0) {
 
                     if (countdown == startCountdown || countdown == (float) (startCountdown / 3 * 2) || countdown <= (float) (startCountdown / 3)) {
+                        broadcastTitle(ChatColor.RED + "" + countdown, "", 5, 13, 2);
                         broadcastMessage(ChatColor.YELLOW + "Die Runde startet in " + ChatColor.RED + countdown + ChatColor.YELLOW + " Sekunden!");
                         if (countdown <= (float) (startCountdown / 3))
                             broadcastNote(Instrument.BASS_GUITAR, new Note(10));
@@ -55,6 +57,7 @@ public class GuardianLobby {
                 } else {
                     cancelCountdown(true);
                     arena.startArena(getPlayers(), preTeamSelection);
+                    broadcastTitle(ChatColor.GREEN + "GO!", "", 5, 40, 5);
                     broadcastNote(Instrument.PIANO, new Note(24));
                     broadcastMessage(ChatColor.RED + "Die Runde startet nun, Viel Glück!");
                     System.out.println("Arena started!");
@@ -169,6 +172,12 @@ public class GuardianLobby {
     public void broadcastMessage(String msg) {
         for (GuardianPlayer p : players.values()) {
             p.getBukkitPlayer().sendMessage(msg);
+        }
+    }
+
+    public void broadcastTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        for (GuardianPlayer p : players.values()) {
+            TitleAPI.sendTitle(p.getBukkitPlayer(), fadeIn, stay, fadeOut, title, subtitle);
         }
     }
 
