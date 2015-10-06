@@ -49,7 +49,7 @@ public class Guardian extends JavaPlugin implements CommandHandler {
         getServer().getPluginManager().registerEvents(new PlayerShopHandler(this), this);
         new TeleportPowderHandler(this);
         getServer().getPluginManager().registerEvents(new TeamSelectionHandler(this), this);
-        
+        getServer().getPluginManager().registerEvents(new PlayerHideHandler(this), this);
         
         SubCommandHandler commandHandler = new GuardianCommandHandler();
         commandHandler.addHandlers(this, new ArenaCommands(this));
